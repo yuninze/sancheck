@@ -1,6 +1,6 @@
-./node_modules
-./server/public
-./server/res
+node_modules
+server/public
+server/res
 *.pem
 *.key
 *.crt
