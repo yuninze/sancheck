@@ -1,4 +1,5 @@
 const express=require("express")
+const limit=require("express-rate-limit")
 const https=require("https")
 const fs=require("fs")
 
@@ -26,6 +27,7 @@ const sieve=require("./routes/sieve")
 const route=require("./routes/route")
 const point=require("./routes/point")
 
+server.use(limit({windowMs:1*5000,max:20}))
 server.use("*",sieve)
 server.use("/",route)
 server.use("/point",point)

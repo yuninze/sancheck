@@ -12,7 +12,7 @@ router.use("*",(req,res,next)=>{
 	session.ua=req.get("User-Agent")
 	session.url=req.originalUrl
 	
-	if (session.ua==false || req.url.endsWith("php") || req.url.endsWith("cgi") || req.url.includes("sql")) {
+	if (session.ua==false || req.url.endsWith("php") || req.url.endsWith("cgi") || req.url.includes("sql") || req.url.includes("hwp")) {
 		res.end()
 	}
 	
