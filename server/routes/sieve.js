@@ -13,7 +13,7 @@ router.use("*",(req,res,next)=>{
 	session.ua=req.get("User-Agent")
 	session.method=req.method
 	session.url=req.originalUrl
-
+	
 	if (session.ua===false || session.method!=="GET" || blockWords.some((q)=>{session.url.endsWith(q)})) {
 		res.end()
 	}
