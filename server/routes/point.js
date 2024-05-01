@@ -1,18 +1,30 @@
-const express=require("express")
-const path=require("path")
-const fs=require("fs")
+// Uppermost Classes
+const Express=require("express")
+const Path=require("path")
+const Fs=require("fs")
 
-const router=express.Router()
+const router=Express.Router()
 
 router.get("/",(req,res)=>{
-	res.sendFile(path.join(__dirname,"..","point.html"))
+	res.sendFile(Path.join(__dirname,"..","point.html"))
+})
+
+router.get("/stats",(req,res)=>{
+	Fs.readdir(Path.join(__dirname,"..","public"),
+		(err,data)=>{
+			res.json(
+				{"result":data.length}
+			)
+	})
 })
 
 router.get("*",(req,res)=>{
-	const filepath=path.join(__dirname,"..","public",req.originalUrl)
-	fs.access(filepath,(err)=>{
+	const path=Path.join(__dirname,"..","public",req.originalUrl)
+	Fs.access(path,(err)=>{
 		if (!err) {
-			if (fs.lstatSync(filepath).isFile()) {res.download(filepath)}
+			if (Fs.lstatSync(filepath).isFile()) {
+				res.download(filepath)
+			}
 		}
 	})
 })

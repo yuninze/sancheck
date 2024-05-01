@@ -3,7 +3,9 @@ const express=require("express")
 const router=express.Router()
 
 const session={}
-const blockWords=["php","cgi","sql"]
+const blockWords=[
+	"php","cgi","sql","dns","dns","git","config","go",""
+]
 
 router.use("*",(req,res,next)=>{
 	const ip=req.socket.remoteAddress
@@ -14,7 +16,7 @@ router.use("*",(req,res,next)=>{
 	session.method=req.method
 	session.url=req.originalUrl
 	
-	if (session.ua===false || session.method!=="GET" || blockWords.some((q)=>{session.url.endsWith(q)})) {
+	if (session.ua==false || blockWords.some((q)=>{session.url.endsWith(q)})) {
 		res.end()
 	}
 	
