@@ -18,13 +18,15 @@ router.get("/stats",(req,res)=>{
 	})
 })
 
-router.get("*",(req,res)=>{
+router.get("*",(req,res,next)=>{
 	const path=Path.join(__dirname,"..","public",req.originalUrl)
 	Fs.access(path,(err)=>{
 		if (!err) {
 			if (Fs.lstatSync(filepath).isFile()) {
 				res.download(filepath)
 			}
+		} else {
+			next(err)
 		}
 	})
 })
