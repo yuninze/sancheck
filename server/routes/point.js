@@ -1,11 +1,12 @@
-// Uppermost Classes
 const Express=require("express")
 const Path=require("path")
 const Fs=require("fs")
-const Multer=require("multer")
+const Upload=require("express-fileupload")
+const Etc=require("../etc.js")
 
 const router=Express.Router()
-const upload=Multer({storage:multer.memoryStorage()})
+
+router.use(Upload())
 
 router.get("/",(req,res)=>{
 	res.sendFile(Path.join(__dirname,"..","point.html"))
@@ -34,23 +35,29 @@ router.get("*",(req,res,next)=>{
 	})
 })
 
-router.post("something",upload.single("file"),(req,res,next)=>{
-	const {fileName,fileBuffer,fileSize}=req.file
-	const path=Path.join(__dirname,"..","public")
+router.post("/something",(req,res,next)=>{
+	let file
+	let fileName
+	let path
 	
-	Fs.writeFile(Path.join(path,fileName),fileBuffer,(err)=>{
-		let result
-		if (!err) {
-			result=0
-		} else {
-			result=1
+	if (!req.files || Object.keys(req.files).length===0) {
+		next()
+	}
+	
+	file=req.files.file
+	fileName=Etc.naming()+"_"+file.name
+	filePath=Path.join(__dirname,"..","public",fileName)
+	
+	file.mv(filePath,(err)=>{
+		if (err) {
 			next(err)
+		} else {
+			res.json({
+				"result":0,
+				"fileName":fileName,
+				"fileSize":file.size
+			})
 		}
-		res.json({
-			"result":result,
-			"fileName":fileName,
-			"fileSize":fileSize
-		})
 	})
 })
 

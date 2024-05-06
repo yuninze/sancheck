@@ -9,15 +9,15 @@ const server=Express()
 class Cert {
 	constructor() {
 		this.key=Fs.readFileSync(
-			"./res/privkey1.pem",
+			"./server/res/privkey1.pem",
 			"utf8"
 		)
 		this.cert=Fs.readFileSync(
-			"./res/cert1.pem",
+			"./server/res/cert1.pem",
 			"utf8"
 		)
 		this.ca=Fs.readFileSync(
-			"./res/chain1.pem",
+			"./server/res/chain1.pem",
 			"utf8"
 		)
 	}
@@ -40,14 +40,16 @@ server.use((req,res,next)=>{
 
 server.use((err,req,res,next)=>{
 	if (err) {
-		if (err.code.length!==3) err.code=500
-		res.status(500).json({"msg":err.message,"code":err.code}).end()
+		if (!err.code || err.code.length!==3) err.code=500
+		res.status(500).json({"result":1,"msg":err.message,"code":err.code}).end()
 	}
 })
 
 const httpsCert=new Cert()
 const httpsServer=Https.createServer(httpsCert,server)
+const listenPort=4430
+const listenAddress="0.0.0.0"
 
-httpsServer.listen(4430,"0.0.0.0",()=>{
-	console.log("listening")
+httpsServer.listen(listenPort,listenAddress,()=>{
+	console.log(`Listening at ${listenAddress}:${listenPort}`)
 })

@@ -4,7 +4,7 @@ const router=Express.Router()
 
 const session={}
 const blockWords=[
-	"php","cgi","sql","git"
+	"php","cgi","sql","git","config"
 ]
 
 router.use("*",(req,res,next)=>{
@@ -16,11 +16,12 @@ router.use("*",(req,res,next)=>{
 	session.method=req.method
 	session.url=req.originalUrl
 	
-	if (!session.ua || blockWords.some((q)=>{session.url.endsWith(q)})) {
-		res.end()
+	console.dir(session)
+	
+	if (blockWords.some((word)=>(session.url.toLowerCase()).includes(word))) {
+		return res.json({result:1,msg:""}).end()
 	}
 	
-	console.dir(session)
 	next()
 })
 
