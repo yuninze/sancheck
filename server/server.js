@@ -1,22 +1,22 @@
-const express=require("express")
-const limit=require("express-rate-limit")
-const https=require("https")
-const fs=require("fs")
+const Express=require("express")
+const Limit=require("express-rate-limit")
+const Https=require("https")
+const Fs=require("fs")
 
-const server=express()
+const server=Express()
 
 // Certificates
 class Cert {
 	constructor() {
-		this.key=fs.readFileSync(
+		this.key=Fs.readFileSync(
 			"./res/privkey1.pem",
 			"utf8"
 		)
-		this.cert=fs.readFileSync(
+		this.cert=Fs.readFileSync(
 			"./res/cert1.pem",
 			"utf8"
 		)
-		this.ca=fs.readFileSync(
+		this.ca=Fs.readFileSync(
 			"./res/chain1.pem",
 			"utf8"
 		)
@@ -27,7 +27,7 @@ const sieve=require("./routes/sieve")
 const route=require("./routes/route")
 const point=require("./routes/point")
 
-server.use(limit({windowMs:1*5000,max:20}))
+server.use(Limit({windowMs:1*5000,max:20}))
 server.use("*",sieve)
 server.use("/",route)
 server.use("/point",point)
@@ -46,7 +46,7 @@ server.use((err,req,res,next)=>{
 })
 
 const httpsCert=new Cert()
-const httpsServer=https.createServer(httpsCert,server)
+const httpsServer=Https.createServer(httpsCert,server)
 
 httpsServer.listen(4430,"0.0.0.0",()=>{
 	console.log("listening")
