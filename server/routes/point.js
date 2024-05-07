@@ -2,7 +2,7 @@ const Express=require("express")
 const Path=require("path")
 const Fs=require("fs")
 const Upload=require("express-fileupload")
-const Etc=require("../etc.js")
+const Etc=require("../etc")
 
 const router=Express.Router()
 
@@ -38,7 +38,7 @@ router.get("*",(req,res,next)=>{
 router.post("/something",(req,res,next)=>{
 	let file
 	let fileName
-	let path
+	let filePath
 	
 	if (!req.files || Object.keys(req.files).length===0) {
 		next()

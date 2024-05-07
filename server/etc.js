@@ -4,4 +4,6 @@ function naming() {
 	return timing + "_" + mixing
 }
 
-module.exports=naming
+module.exports={
+	naming
+}
