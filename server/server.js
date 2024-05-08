@@ -41,7 +41,8 @@ server.use((req,res,next)=>{
 server.use((err,req,res,next)=>{
 	if (err) {
 		if (!err.code || err.code.length!==3) err.code=500
-		res.status(500).json({"result":1,"msg":err.message,"code":err.code}).end()
+		res.status(500)
+		res.json({"result":1,"msg":err.message,"code":err.code}).end()
 	}
 })
 

@@ -12,12 +12,16 @@ router.get("/",(req,res)=>{
 	res.sendFile(Path.join(__dirname,"..","point.html"))
 })
 
-router.get("/stats",(req,res)=>{
+router.get("/stats",(req,res,next)=>{
 	Fs.readdir(Path.join(__dirname,"..","public"),
 		(err,data)=>{
-			res.json(
-				{"result":data.length}
-			)
+			if (!err) {
+				res.json(
+					{"result":data.length}
+				)
+			} else {
+				next(err)
+			}
 	})
 })
 
@@ -49,14 +53,14 @@ router.post("/something",(req,res,next)=>{
 	filePath=Path.join(__dirname,"..","public",fileName)
 	
 	file.mv(filePath,(err)=>{
-		if (err) {
-			next(err)
-		} else {
+		if (!err) {
 			res.json({
 				"result":0,
 				"fileName":fileName,
 				"fileSize":file.size
 			})
+		} else {
+			next(err)
 		}
 	})
 })

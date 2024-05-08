@@ -1,10 +1,11 @@
-const express=require("express")
-const path=require("path")
+const Express=require("express")
+const Path=require("path")
 
-const router=express.Router()
+const router=Express.Router()
 
 router.get("/",(req,res,next)=>{
-	res.sendFile(path.join(__dirname,"..","index.html"))
+	if (req.originalUrl==="/favicon.ico") res.sendFile(Path.join(__dirname,"..","res","favicon.ico"))
+	res.sendFile(Path.join(__dirname,"..","index.html"))
 })
 
 module.exports=router
