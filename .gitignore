@@ -1,7 +1,8 @@
 node_modules
 server/public/
 server/res/
-.DS_Store
 *.pem
 *.key
 *.crt
+
+.DS_Store

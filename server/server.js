@@ -32,17 +32,14 @@ server.use("*",sieve)
 server.use("/",route)
 server.use("/point",point)
 
-server.use((req,res,next)=>{
+server.use((req,res)=>{
 	const err=new Error("Something Went Wrong")
 	err.code=404
-	next(err)
-})
 
-server.use((err,req,res,next)=>{
 	if (err) {
 		if (!err.code || err.code.length!==3) err.code=500
 		res.status(500)
-		res.json({"result":1,"msg":err.message,"code":err.code}).end()
+		res.json({"result":1,"msg":err.message,"code":err.code})
 	}
 })
 

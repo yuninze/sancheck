@@ -5,7 +5,7 @@ const router=Express.Router()
 
 const session={}
 const blockWords=[
-	"php","cgi","sql","git","config","public","static","remote"
+	"php","cgi","aspx","xml","sql","git","config","./"
 ]
 
 router.all("*",(req,res,next)=>{
@@ -16,8 +16,12 @@ router.all("*",(req,res,next)=>{
 		session.ua=req.get("User-Agent")
 		session.method=req.method
 		session.url=req.originalUrl
+		session.result=0
 		
-		if (blockWords.some((word)=>(session.url.toLowerCase()).includes(word))) {
+		if (
+			blockWords.some((word)=>(
+				session.url.toLowerCase()).includes(word)
+			)) {
 			session.result=1
 			return res.end()
 		}

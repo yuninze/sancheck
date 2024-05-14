@@ -2,31 +2,40 @@ const Express=require("express")
 const Path=require("path")
 const Fs=require("fs")
 const Upload=require("express-fileupload")
+const Url=require("url")
 const Etc=require("../etc")
 
 const router=Express.Router()
 
 router.use(Upload())
 
-router.get("/",(req,res)=>{
+router.get("/",(req,res,next)=>{
 	res.sendFile(Path.join(__dirname,"..","point.html"))
 })
 
 router.get("/stats",(req,res,next)=>{
-	Fs.readdir(Path.join(__dirname,"..","public"),
-		(err,data)=>{
-			if (!err) {
-				res.json(
-					{"result":data.length}
-				)
-			} else {
-				next(err)
-			}
+	Fs.readdir(Path.join(__dirname,"..","public"),(err,data)=>{
+		if (!err) {
+			const fileNames=data
+			res.json({
+				"result":0,
+				"kazu":fileNames.length,
+				"naiyou":fileNames.filter((fileName)=>{
+					if (fileName.length>20) {
+						~(Etc.isNumeric(fileName.substring(0,12)))
+					} else {
+						return true
+					}
+				})
+			})
+		} else {
+			next(err)
+		}
 	})
 })
 
 router.get("*",(req,res,next)=>{
-	const path=Path.join(__dirname,"..","public",req.originalUrl)
+	const path=Path.join(__dirname,"..","public",Url.parse(req.url).path)
 	
 	Fs.access(path,(err)=>{
 		if (!err) {
