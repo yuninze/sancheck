@@ -1,3 +1,5 @@
+process.chdir("/home/yuninze/sancheck")
+
 const Express=require("express")
 const Limit=require("express-rate-limit")
 const Https=require("https")
