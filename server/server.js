@@ -1,11 +1,12 @@
-process.chdir("/home/yuninze/sancheck")
-
 const Express=require("express")
 const Limit=require("express-rate-limit")
 const Https=require("https")
 const Fs=require("fs")
 
 const server=Express()
+
+const repo="/home/yuninze/sancheck"
+process.chdir(repo)
 
 // Certificates
 class Cert {
@@ -34,7 +35,7 @@ server.use("*",sieve)
 server.use("/",route)
 server.use("/point",point)
 
-server.use((req,res)=>{
+server.use((req,res,next)=>{
 	const err=new Error("Something Went Wrong")
 	err.code=404
 

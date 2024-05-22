@@ -1,5 +1,4 @@
 const Express=require("express")
-const Path=require("path")
 
 const router=Express.Router()
 
@@ -26,7 +25,7 @@ router.all("*",(req,res,next)=>{
 			return res.end()
 		}
 		
-		console.dir(session)
+		console.log(session)
 		
 		next()
 	})

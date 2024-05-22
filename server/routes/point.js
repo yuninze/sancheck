@@ -2,7 +2,6 @@ const Express=require("express")
 const Path=require("path")
 const Fs=require("fs")
 const Upload=require("express-fileupload")
-const Url=require("url")
 const Etc=require("../etc")
 
 const router=Express.Router()
@@ -34,8 +33,8 @@ router.get("/stats",(req,res,next)=>{
 	})
 })
 
-router.get("*",(req,res,next)=>{
-	const path=Path.join(__dirname,"..","public",Url.parse(req.url).path)
+router.get("*",(err,req,res,next)=>{
+	const path=Path.join(__dirname,"..","public",URL(req.url).pathname)
 	
 	Fs.access(path,(err)=>{
 		if (!err) {
