@@ -8,7 +8,7 @@ from time import sleep
 
 ornament=" . "*3
 dst="https://sanbo.space/point/something"
-certFile="d:\\yuninze\\code\\nih.go.kr\\res\\somansa.crt"
+cert=""
 externPath=sys.argv[1]
 
 startpointPath="C:\\code\\nih.go.kr\\work"
@@ -40,11 +40,12 @@ def hello(
         multi=True if len(extern)>1 or repeat>1 else False
     else:
         print(ornament,"Path should direct a directory.")
-        return 
+        return 1
     
-    cert=certFile if os.path.exists(certFile) else False
+    cert=cert if os.path.exists(cert) else False
     
     session=requests.Session()
+    session.cert=False
 
     def _post(
         dst,
@@ -53,18 +54,20 @@ def hello(
     )->dict:
     
         with open(something,"rb") as something:
+            final=session.post(
+                dst,
+                files={"file":something}
+            ).json()
+
             if multi:
                 delay=round(random()*2)
                 print(res,f"\nWaiting {delay} second(s)")
                 sleep(delay)
             
-            return session.post(
-                dst,
-                files={"file":something}
-            ).json()
-    
+        return final
+
     return list(chain.from_iterable(
         [[_post(dst,q,multi=multi) for q in extern] for w in range(repeat)]
     ))
 
-hello(dst,certFile,externPath)
+hello(dst,cert,externPath)
