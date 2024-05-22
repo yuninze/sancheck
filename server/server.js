@@ -5,22 +5,22 @@ const Fs=require("fs")
 
 const server=Express()
 
-const repo="/home/yuninze/sancheck"
+const repo="/home/yuninze/sancheck/server"
 process.chdir(repo)
 
 // Certificates
 class Cert {
 	constructor() {
 		this.key=Fs.readFileSync(
-			"./server/res/privkey1.pem",
+			"./res/privkey1.pem",
 			"utf8"
 		)
 		this.cert=Fs.readFileSync(
-			"./server/res/cert1.pem",
+			"./res/cert1.pem",
 			"utf8"
 		)
 		this.ca=Fs.readFileSync(
-			"./server/res/chain1.pem",
+			"./res/chain1.pem",
 			"utf8"
 		)
 	}

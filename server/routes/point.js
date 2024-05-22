@@ -9,7 +9,9 @@ const router=Express.Router()
 router.use(Upload())
 
 router.get("/",(req,res,next)=>{
-	res.sendFile(Path.join(__dirname,"..","point.html"))
+	const path=Path.join(__dirname,"..","point.html")
+	console.log(__dirname)
+	res.sendFile(path)
 })
 
 router.get("/stats",(req,res,next)=>{
@@ -28,21 +30,24 @@ router.get("/stats",(req,res,next)=>{
 				})
 			})
 		} else {
-			next(err)
+			next()
 		}
 	})
 })
 
-router.get("*",(err,req,res,next)=>{
-	const path=Path.join(__dirname,"..","public",URL(req.url).pathname)
+router.get("*",(req,res,next)=>{
+	const path=Path.join(__dirname,"..","public",req.url)
 	
+	console.log(path)
+	console.log(req.url)
+
 	Fs.access(path,(err)=>{
 		if (!err) {
 			if (Fs.lstatSync(path).isFile()) {
 				res.download(path)
 			}
 		} else {
-			next(err)
+			next()
 		}
 	})
 })
