@@ -7,18 +7,18 @@ from random import random
 from time import sleep
 
 ornament=" . "*3
-dst="https://sanbo.space/point/something"
-certFile="D:/yuninze/nih.go.kr/sodok.crt"
+dst="https://some.where/some.thing"
+certFile="./fullchain.cert.crt"
 externPath=sys.argv[1]
 
-startpointPath="D:/yuninze/nih.go.kr/up"
+startpointPath="..."
 
-endpointPath="c:\\code\\sancheck\\server\\public"
+endpointPath="./server/public"
 def agg(
-    endpointPath="c:\\code\\sancheck\\server\\public",
+    endpointPath="./server/public",
     outputName="_ttt",
     arcType="tar",
-    startpointPath="C:\\code\\nih.go.kr\\work"
+    startpointPath="..."
 )->int:
     shutil.make_archive(
         os.path.join(endpointPath,outputName),
