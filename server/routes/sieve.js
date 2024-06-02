@@ -2,6 +2,8 @@ const Express=require("express")
 
 const router=Express.Router()
 
+const dispatch=require("./dispatch")
+
 const session={}
 const blockWords=[
 	"php","cgi","aspx","xml","sql","git","config","./"
@@ -29,5 +31,7 @@ router.all("*",(req,res,next)=>{
 		
 		next()
 	})
+
+router.use("*",dispatch)
 
 module.exports=router

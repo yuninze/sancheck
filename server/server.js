@@ -8,6 +8,8 @@ const server=Express()
 const repo="/home/yuninze/sancheck/server"
 process.chdir(repo)
 
+const sieve=require("./routes/sieve")
+
 // Certificates
 class Cert {
 	constructor() {
@@ -26,23 +28,14 @@ class Cert {
 	}
 }
 
-const sieve=require("./routes/sieve")
-const route=require("./routes/route")
-const point=require("./routes/point")
-
+server.set("json spaces",2)
 server.use(Limit({windowMs:1*5000,max:20}))
 server.use("*",sieve)
-server.use("/",route)
-server.use("/point",point)
 
 server.use((req,res,next)=>{
-	const err=new Error("Something Went Wrong")
-	err.code=404
-
-	if (err) {
-		if (!err.code || err.code.length!==3) err.code=500
+	if (!(typeof err==="undefined")) {
 		res.status(500)
-		res.json({"result":1,"msg":err.message,"code":err.code})
+		res.json({"result":1,"msg":err.message,"code":500})
 	}
 })
 

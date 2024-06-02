@@ -22,8 +22,8 @@ router.get("/stats",(req,res,next)=>{
 				"result":0,
 				"kazu":fileNames.length,
 				"naiyou":fileNames.filter((fileName)=>{
-					if (fileName.length>20) {
-						~(Etc.isNumeric(fileName.substring(0,12)))
+					if (Etc.isNumeric(fileName.substring(0,21).replace("_",""))) {
+						return false
 					} else {
 						return true
 					}
@@ -37,10 +37,6 @@ router.get("/stats",(req,res,next)=>{
 
 router.get("*",(req,res,next)=>{
 	const path=Path.join(__dirname,"..","public",req.url)
-	
-	console.log(path)
-	console.log(req.url)
-
 	Fs.access(path,(err)=>{
 		if (!err) {
 			if (Fs.lstatSync(path).isFile()) {
@@ -53,29 +49,38 @@ router.get("*",(req,res,next)=>{
 })
 
 router.post("/something",(req,res,next)=>{
+	const root=Path.join(__dirname,"..","public")
 	let file
 	let fileName
 	let filePath
+	let fileSizes
 	
 	if (!req.files || Object.keys(req.files).length===0) {
 		next()
 	}
-	
+
+	fileSizes=Fs.readdirSync(root).map((elem)=>{
+		return Fs.statSync(Path.join(root,elem)).size
+	})
 	file=req.files.file
 	fileName=Etc.naming()+"_"+file.name
-	filePath=Path.join(__dirname,"..","public",fileName)
-	
-	file.mv(filePath,(err)=>{
-		if (!err) {
-			res.json({
-				"result":0,
-				"fileName":fileName,
-				"fileSize":file.size
-			})
-		} else {
-			next(err)
-		}
-	})
+	filePath=Path.join(root,fileName)
+
+	if (!fileSizes.includes(file.size)) {
+		file.mv(filePath,(err)=>{
+			if (!err) {
+				res.json({
+					"result":0,
+					"fileName":fileName,
+					"fileSize":file.size
+				})
+			} else {
+				next()
+			}
+		})
+	} else {
+		next()
+	}
 })
 
 module.exports=router

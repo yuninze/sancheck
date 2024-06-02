@@ -8,12 +8,12 @@ from time import sleep
 
 ornament=" . "*3
 dst="https://sanbo.space/point/something"
-cert=""
+certFile="D:/yuninze/nih.go.kr/sodok.crt"
 externPath=sys.argv[1]
 
-startpointPath="C:\\code\\nih.go.kr\\work"
-endpointPath="c:\\code\\sancheck\\server\\public"
+startpointPath="D:/yuninze/nih.go.kr/up"
 
+endpointPath="c:\\code\\sancheck\\server\\public"
 def agg(
     endpointPath="c:\\code\\sancheck\\server\\public",
     outputName="_ttt",
@@ -40,12 +40,12 @@ def hello(
         multi=True if len(extern)>1 or repeat>1 else False
     else:
         print(ornament,"Path should direct a directory.")
-        return 1
+        return 
     
-    cert=cert if os.path.exists(cert) else False
+    cert=certFile if os.path.exists(certFile) else False
     
     session=requests.Session()
-    session.cert=False
+    session.verify=cert
 
     def _post(
         dst,
@@ -54,20 +54,22 @@ def hello(
     )->dict:
     
         with open(something,"rb") as something:
+            if multi:
+                delay=round(random()*2)
+                print(ornament,f"\nWaiting {delay} second(s)")
+                sleep(delay)
+            
             final=session.post(
                 dst,
                 files={"file":something}
             ).json()
-
-            if multi:
-                delay=round(random()*2)
-                print(res,f"\nWaiting {delay} second(s)")
-                sleep(delay)
             
-        return final
-
+            print(ornament,final)
+            
+            return final
+    
     return list(chain.from_iterable(
         [[_post(dst,q,multi=multi) for q in extern] for w in range(repeat)]
     ))
 
-hello(dst,cert,externPath)
+hello(dst,certFile,externPath)
