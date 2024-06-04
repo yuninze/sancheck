@@ -9,6 +9,9 @@ const repo="/home/yuninze/sancheck/server"
 process.chdir(repo)
 
 const sieve=require("./routes/sieve")
+const dispatch=require("./routes/dispatch")
+const point=require("./routes/point")
+const baseline=require("./routes/baseline")
 
 // Certificates
 class Cert {
@@ -31,6 +34,9 @@ class Cert {
 server.set("json spaces",2)
 server.use(Limit({windowMs:1*5000,max:20}))
 server.use("*",sieve)
+server.use("/",dispatch)
+server.use("/point",point)
+server.use("/baseline",baseline)
 
 server.use((req,res,next)=>{
 	if (!(typeof err==="undefined")) {
