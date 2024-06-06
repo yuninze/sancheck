@@ -38,9 +38,9 @@ def hello(
     if os.path.isdir(externPath):
         extern=[q.path for q in os.scandir(something) if q.is_file()]
         multi=True if len(extern)>1 or repeat>1 else False
-    else:
-        print(ornament,"Path should direct a directory.")
-        return 
+    elif os.path.isfile(externPath):
+        extern=externPath
+        multi=False
     
     cert=certFile if os.path.exists(certFile) else False
     
@@ -68,8 +68,11 @@ def hello(
             
             return final
     
-    return list(chain.from_iterable(
-        [[_post(dst,q,multi=multi) for q in extern] for w in range(repeat)]
-    ))
+    if multi:
+        return list(chain.from_iterable(
+            [[_post(dst,q,multi=multi) for q in extern] for w in range(repeat)]
+        ))
+    
+    return [_post(dst,extern,multi=multi) for q in range(repeat)]
 
 hello(dst,certFile,externPath)
