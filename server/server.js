@@ -13,7 +13,6 @@ const dispatch=require("./routes/dispatch")
 const point=require("./routes/point")
 const baseline=require("./routes/baseline")
 
-// Certificates
 class Cert {
 	constructor() {
 		this.key=Fs.readFileSync(
@@ -32,16 +31,19 @@ class Cert {
 }
 
 server.set("json spaces",2)
-server.use(Limit({windowMs:1*5000,max:20}))
+server.use(Limit({windowMs:1*5000,max:50}))
 server.use("*",sieve)
 server.use("/",dispatch)
 server.use("/point",point)
 server.use("/baseline",baseline)
 
 server.use((req,res,next)=>{
-	if (!(typeof err==="undefined")) {
-		res.status(500)
-		res.json({"result":1,"msg":err.message,"code":500})
+	res.status(500)
+
+	if (typeof err==="undefined") {
+		res.json({"result":1,"msg":"Something Went Wrong (Not Implemented)","code":res.statusCode})
+	} else {
+		res.json({"result":1,"msg":err.message,"code":res.statusCode})
 	}
 })
 

@@ -1,3 +1,5 @@
+const Fs=require("fs")
+
 function isNumeric(digit) {
 	return !isNaN(parseFloat(digit)) && isFinite(digit)
 }
@@ -9,6 +11,13 @@ function naming() {
 	for (const l=mixing.length;l<8;l++) mixing="0"+mixing
 	
 	return timing + "_" + mixing
+}
+
+function timing(input) {
+	const key=parseInt(Fs.readFileSync("../../sancheck.key","utf8"))
+	const time=parseInt(Date.now().toString().slice(0,9))
+	
+	if (input==key*time) return true
 }
 
 function otherwise(ua) {

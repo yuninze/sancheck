@@ -15,7 +15,6 @@ router.all("*",(req,res,next)=>{
 		session.ua=req.get("User-Agent")
 		session.method=req.method
 		session.url=req.originalUrl
-		session.result=0
 		
 		if (
 			blockWords.some((word)=>(

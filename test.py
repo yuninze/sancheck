@@ -1,75 +1,79 @@
 import os
 import sys
 import requests
-import shutil
+from requests_toolbelt import MultipartEncoder
 from itertools import chain
 from random import random
 from time import sleep
 
 ornament=" . "*3
-dst="https://sanbo.space/point/something"
-certFile="D:/yuninze/nih.go.kr/sodok.crt"
-externPath=sys.argv[1]
-
-startpointPath="D:/yuninze/nih.go.kr/up"
-
-endpointPath="c:\\code\\sancheck\\server\\public"
-def agg(
-    endpointPath="c:\\code\\sancheck\\server\\public",
-    outputName="_ttt",
-    arcType="tar",
-    startpointPath="C:\\code\\nih.go.kr\\work"
-)->int:
-    shutil.make_archive(
-        os.path.join(endpointPath,outputName),
-        arcType,
-        startpointPath
-    )
-    
-    return 0
+fileSizeLimit=1024 ** 3 * 4
 
 def hello(
     dst,
     cert,
-    something,
+    externPath,
     repeat=1,
 )->list:
     
     if os.path.isdir(externPath):
-        extern=[q.path for q in os.scandir(something) if q.is_file()]
+        extern={q.path:q.stat().st_size<fileSizeLimit for q in os.scandir(externPath) if q.is_file()}
         multi=True if len(extern)>1 or repeat>1 else False
+    elif os.path.isfile(externPath):
+        extern={externPath:True if os.path.getsize(externPath)<fileSizeLimit else False}
+        multi=False
     else:
-        print(ornament,"Path should direct a directory.")
-        return 
-    
-    cert=certFile if os.path.exists(certFile) else False
+        raise ValueError(f"Path-like object {externPath} does not exist")
     
     session=requests.Session()
-    session.verify=cert
-
+    
+    if cert:
+        session.verify=cert if os.path.exists(cert) else False
+    else:
+        session.verify=True
+    
     def _post(
         dst,
-        something,
+        file,
+        small,
         multi,
-    )->dict:
-    
-        with open(something,"rb") as something:
-            if multi:
-                delay=round(random()*2)
-                print(ornament,f"\nWaiting {delay} second(s)")
-                sleep(delay)
-            
+    )->list:
+
+        if multi:
+            delay=round(random()*3)
+            print(ornament,f"\nWaiting {delay} second(s)")
+            sleep(delay)
+        
+        if small:
+            print(f"{ornament} Initiating for {file} ({extern[file]})")
+            with open(file,"rb") as fileContent:
+                final=session.post(
+                    dst,
+                    files={"file":fileContent},
+                ).json()
+        else:
+            encoder=MultipartEncoder(
+                fields={"file":(os.path.split(file)[1],open(file,"rb"),"text/plain")}
+            )
             final=session.post(
                 dst,
-                files={"file":something}
-            ).json()
-            
-            print(ornament,final)
-            
-            return final
-    
-    return list(chain.from_iterable(
-        [[_post(dst,q,multi=multi) for q in extern] for w in range(repeat)]
-    ))
+                data=encoder,
+                headers={"Content-Type":encoder.content_type}
+            )
 
-hello(dst,certFile,externPath)
+        print(ornament,final)
+        
+        return final
+    
+    if multi:
+        return list(chain.from_iterable(
+            [[_post(dst,q,extern[q],multi=multi) for q in extern] for w in range(repeat)]
+        ))
+    
+    return [_post(dst,list(extern.keys())[0],extern[list(extern.keys())[0]],multi=multi) for q in range(repeat)]
+    
+dst="https://sanbo.space/point/something"
+cert="d:/yuninze/nih.go.kr/sodok.crt"
+externPath=sys.argv[1]
+
+hello(dst,None,externPath)
