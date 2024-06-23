@@ -18,9 +18,8 @@ const namae=[
 const data=Arrow.tableFromIPC(Fs.readFileSync(datafile))
 
 router.route("/")
-
   .get((req,res,next)=>{
-    res.json(data.slice(0,1000).toArray())
+    res.json(data.slice(0,2).toArray())
   })
 
   .post((req,res,next)=>{

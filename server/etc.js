@@ -1,5 +1,7 @@
 const Fs=require("fs")
 
+const key=Fs.readFileSync("./res/sancheck.key","utf8").split(",").map((x)=>parseInt(x))
+
 function isNumeric(digit) {
 	return !isNaN(parseFloat(digit)) && isFinite(digit)
 }
@@ -13,25 +15,28 @@ function naming() {
 	return timing + "_" + mixing
 }
 
-function timing(input) {
-	const key=parseInt(Fs.readFileSync("../../sancheck.key","utf8"))
-	const time=parseInt(Date.now().toString().slice(0,9))
-	
-	if (input==key*time) return true
+function parsing(url) {
+	return Object.fromEntries(new URLSearchParams(url.replace("/","")))
 }
 
-function otherwise(ua) {
-	const allow=[
-	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-	]
-	
-	if (allow.length===1 && ua===allow[0]) return true
-	
-	return false
+function timing(itu) {
+	const chain={
+		itu:parseInt(itu.toString().slice(0,key[1])),
+		now:parseInt((Date.now()*key[0]).toString().slice(0,key[1]))
+	}
+	chain.sa=Math.abs(chain.itu-chain.now)
+
+	return chain.sa < 3000
+}
+
+function redacting(string) {
+	return string.slice(0,25)+"..."
 }
 
 module.exports={
 	isNumeric,
 	naming,
-	otherwise,
+	parsing,
+	timing,
+	redacting
 }

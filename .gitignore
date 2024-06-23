@@ -1,6 +1,7 @@
 node_modules
-server/public/
-server/res/
+server/souko
+server/public
+server/res
 *.pem
 *.key
 *.crt
