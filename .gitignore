@@ -1,9 +1,8 @@
 node_modules
-server/souko
+server/kura
 server/public
 server/res
 *.pem
 *.key
 *.crt
-
-.DS_Store
+*.tar

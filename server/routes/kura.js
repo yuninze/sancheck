@@ -6,20 +6,20 @@ const Etc=require("../etc")
 
 const router=Express.Router()
 
-const dst="souko"
+const dst="kura"
 
 router.get("/",(req,res,next)=>{
-	const path=Path.join(__dirname,"..","point.html")
-	res.sendFile(path)
+	res.send("kura....!!")
 })
 
-router.get("/stats",(req,res,next)=>{
+router.get("/stat",(req,res,next)=>{
 	const path=Path.join(__dirname,"..",dst)
 	Fs.readdir(path,(err,data)=>{
 		if (!err) {
 			const fileNames=data
-			const fileSizes=fileNames.map((fileName)=>{return Fs.statSync(Path.join(path,fileName)).size})
-
+			const fileSizes=fileNames.map((fileName)=>{
+				return Fs.statSync(Path.join(path,fileName)).size
+			})
 			res.json({
 				"result":0,
 				"kazu":fileNames.length,
@@ -35,51 +35,50 @@ router.get("/stats",(req,res,next)=>{
 	})
 })
 
-router.get("*",(req,res,next)=>{
-	const url=Etc.parsing(req.url)
-	let err=Error()
+router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
+	const url={...req.params}
 
+	let err=Error()
 	err.spec={
+		private:url.mono.length>18,
 		keys:Object.keys(url)?Object.keys(url).length<2:true,
 		mono:url.mono?url.mono.length<3:true,
 		itu_l:url.itu?url.itu.toString().length<12:true,
 		itu_h:url.itu?!Etc.timing(url.itu):true
 	}
 	
-	if (Object.values(err.spec).some((v)=>v)) {
-		err.message=Object.keys(err.spec).filter((errSpecName)=>{
-			if (err.spec[errSpecName]) return true
-		}).join(", ")
-		return next(err)
+	if (err.spec.private) {
+		if (Object.values(err.spec).some((v)=>v)) {
+			err.message=Object.keys(err.spec).filter(
+				(spec)=>{if (err.spec[spec]) return true}).join(", ")
+			return next(err)
+		}
 	}
 
 	const path=Path.join(__dirname,"..",dst,url.mono)
 
-	Fs.access(path,(e)=>{
-		if (!e && Fs.lstatSync(path).isFile()) return res.download(path).end()
-		
-		e.message=Etc.redacting(e.message)
-		return next(e)
+	Fs.access(path,(err)=>{
+		if (!err && Fs.lstatSync(path).isFile()) return res.download(path)
+		err.message=Etc.redacting(e.message)
+		return next(err)
 	})
 })
 
-router.post("/something",(req,res,next)=>{
+router.post("/",(req,res,next)=>{
 	const path=Path.join(__dirname,"..",dst)
 	const busboy=Busboy({headers:req.headers,highWaterMark:1024**3*5})
-	console.dir(req.headers)
 
 	busboy.on("files",(file,info)=>{
 		const fileName=Etc.naming()+"_"+info.filename
 
-		console.log(`.........Got a file ${info.filename}`)
 		file.pipe(Fs.createWriteStream(Path.join(path,fileName)))
 		file.on("close",()=>{
 			return res.json({
-				"result":0,"fileName":fileName
+				"result":0,
+				"fileName":fileName
 			}).catch("err",(err)=>{return next(err)})
 		})
 	})
-
 	req.pipe(busboy)
 })
 

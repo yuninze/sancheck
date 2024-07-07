@@ -2,17 +2,25 @@ const Express=require("express")
 const Limit=require("express-rate-limit")
 const Https=require("https")
 const Fs=require("fs")
+const Etc=require("./etc")
 
 const server=Express()
 
 const repo="/home/yuninze/code/sancheck/server"
 process.chdir(repo)
 
-const Etc=require("./etc")
+server.set("json spaces",2)
+server.use(Express.static("./public"))
+server.use(Limit({windowMs:1000 * 10,max:32}))
+
 const sieve=require("./routes/sieve")
 const dispatch=require("./routes/dispatch")
-const point=require("./routes/point")
+const kura=require("./routes/kura")
 const baseline=require("./routes/baseline")
+server.use("*",sieve)
+server.use("/",dispatch)
+server.use("/kura",kura)
+server.use("/baseline",baseline)
 
 class Cert {
 	constructor() {
@@ -31,21 +39,12 @@ class Cert {
 	}
 }
 
-server.set("json spaces",2)
-server.use(Express.static("./public"))
-server.use(Limit({windowMs:1000 * 10,max:32}))
-server.use("*",sieve)
-server.use("/",dispatch)
-server.use("/point",point)
-server.use("/baseline",baseline)
-
 server.use((err,req,res,next)=>{
 	res.status(500)
-
 	if (typeof err==="undefined") {
 		res.json({
 			"result":1,
-			"msg":"Something Went Wrong (Not Implemented)",
+			"msg":"Something Went Wrong",
 			"code":res.statusCode
 		})
 	} else {
@@ -55,8 +54,6 @@ server.use((err,req,res,next)=>{
 			"code":res.statusCode
 		})
 	}
-
-	console.log(err)
 })
 
 const listenPort=[4430,17310]

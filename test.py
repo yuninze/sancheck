@@ -101,7 +101,7 @@ def hello(
     
     return [_post(dst,list(extern.keys())[0],multi=multi) for q in range(repeat)]
     
-dst="https://sanbo.space/point/something"
+dst="https://sanbo.space/kura"
 cert="d:/yuninze/nih.go.kr/sodok.crt"
 externPath=sys.argv[1]
 

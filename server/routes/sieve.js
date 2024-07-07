@@ -5,7 +5,10 @@ const router=Express.Router()
 
 const session={}
 const blockWords=[
-	"php","cgi","cgi-bin","asp","aspx","jsp","jspx","xml","sql","git","remote","config","login"
+	"php","cgi","cgi-bin","asp","aspx",
+	"jsp","jspx","xml","sql","env",
+	"git","remote","config","login",
+	"./"
 ]
 
 router.all("*",(req,res,next)=>{
@@ -18,17 +21,14 @@ router.all("*",(req,res,next)=>{
 		session.url=req.originalUrl
 		session.result=0
 		
-		if (
-			blockWords.some((word)=>(
-				session.url.toLowerCase()).includes(word)
-			)) {
+		if (blockWords.some(word=>(session.url.toLowerCase()).includes(word))) {
 			session.result=1
-			return res.end()
 		}
 		
 		console.log(session)
-		
-		Etc.nikkiKaki(session)
+		Etc.nikkiKaki([session])
+
+		if (session.result===1) return res.end()
 		
 		return next()
 	})
