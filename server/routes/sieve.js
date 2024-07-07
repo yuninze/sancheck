@@ -1,4 +1,5 @@
 const Express=require("express")
+const Etc=require("../etc")
 
 const router=Express.Router()
 
@@ -26,6 +27,8 @@ router.all("*",(req,res,next)=>{
 		}
 		
 		console.log(session)
+		
+		Etc.nikkiKaki(session)
 		
 		return next()
 	})

@@ -1,9 +1,8 @@
+const Path=require("path")
 const Fs=require("fs")
 
-const key=Fs.readFileSync("./res/sancheck.key","utf8").split(",").map((x)=>parseInt(x))
-
-function isNumeric(digit) {
-	return !isNaN(parseFloat(digit)) && isFinite(digit)
+function isNumeric(str) {
+	return !isNaN(parseFloat(str)) && isFinite(str)
 }
 
 function naming() {
@@ -20,6 +19,7 @@ function parsing(url) {
 }
 
 function timing(itu) {
+	const key=Fs.readFileSync("./res/sancheck.key","utf8").split(",").map((x)=>parseInt(x))
 	const chain={
 		itu:parseInt(itu.toString().slice(0,key[1])),
 		now:parseInt((Date.now()*key[0]).toString().slice(0,key[1]))
@@ -30,7 +30,36 @@ function timing(itu) {
 }
 
 function redacting(string) {
-	return string.slice(0,25)+"..."
+	const a=string.indexOf("'/")
+	const b=string.indexOf("/san")
+	const c=string.slice(0,a)
+	const d=string.slice(b)
+	return c+".."+d
+}s
+
+function nikkiYomi() {
+	Fs.access(nikkifile,(err)=>{
+		if (err) {
+			Fs.writeFileSync(nikkiFile,JSON.parse("[]"))
+			e.message="Wrote Placeholder Content"
+			return err
+		}
+	})
+	Fs.readFile(nikkiFile,"utf8",(err,data)=>{
+		if (err) {
+			e.message="Unknown JSON Error"
+			return err
+		}
+		const load=JSON.parse(data,{encoding:"utf8"})
+		console.log(load)
+		return load
+	})
+}
+
+function nikkiKaki(naiyou) {
+	Fs.writeFile(nikkiFile,JSON.stringify(naiyou,null,2),err=>{
+		console.log("nikkiKaki: ",err.message)
+	})
 }
 
 module.exports={
@@ -38,5 +67,7 @@ module.exports={
 	naming,
 	parsing,
 	timing,
-	redacting
+	redacting,
+	nikkiYomi,
+	nikkiKaki
 }

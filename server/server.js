@@ -8,6 +8,7 @@ const server=Express()
 const repo="/home/yuninze/code/sancheck/server"
 process.chdir(repo)
 
+const Etc=require("./etc")
 const sieve=require("./routes/sieve")
 const dispatch=require("./routes/dispatch")
 const point=require("./routes/point")
@@ -58,7 +59,7 @@ server.use((err,req,res,next)=>{
 	console.log(err)
 })
 
-const listenPort=[4430,8000]
+const listenPort=[4430,17310]
 const listenAddress="0.0.0.0"
 
 try {
@@ -66,7 +67,7 @@ try {
 	const httpsServer=Https.createServer(httpsCert,server)
 	httpsServer.listen(listenPort[0],listenAddress,()=>{})
 } catch (err) {
-	console.log("CertError:",err.message)
+	console.log("CertError:",Etc.redacting(err.message))
 } finally {
 	server.listen(listenPort[1],listenAddress,()=>{})
 }
