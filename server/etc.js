@@ -11,7 +11,6 @@ function naming() {
 	const timing = (Date.now()).toString()
 	let mixing = (Math.round(Math.random() * 10 ** 8)).toString()
 	for (const l = mixing.length; l < 8; l++) mixing = "0" + mixing
-	
 	return timing + "_" + mixing
 }
 
@@ -26,7 +25,6 @@ function timing(itu) {
 		now: parseInt((Date.now() * key[0]).toString().slice(0, key[1]))
 	}
 	chain.sa = Math.abs(chain.itu - chain.now)
-
 	return chain.sa < 5000
 }
 
@@ -35,14 +33,13 @@ function redacting(string) {
 	const b = string.indexOf("/san")
 	const c = string.slice(0, a)
 	const d = string.slice(b)
-
 	return c + ".." + d
 }
 
 function nikkiYomi(cb) {
 	Fs.readFile(nikkiFile,"utf8",(err,data)=>{
 		if (err) return cb(err)
-		cb(null,JSON.parse(data))
+		cb(null,JSON.parse(data).naiyou)
 	})
 }
 
@@ -51,13 +48,13 @@ function nikkiKaki(ato) {
 		if (err) return cb(err)
 		Fs.writeFile(
 			nikkiFile,
-			JSON.stringify(data.concat(ato)),
+			JSON.stringify({"naiyou":data.concat(ato)}),
 			{encoding:"utf8",flags:"w"},
 			(err)=>{if (err) return err})
 	})
 }
 
-module.exports = {
+module.exports={
 	isNumeric,
 	naming,
 	parsing,
