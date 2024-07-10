@@ -7,13 +7,31 @@ const Etc=require("../etc")
 const router=Express.Router()
 
 const dst="kura"
+const path=Path.join(__dirname,"..",dst)
 
-router.get("/",(req,res,next)=>{
-	res.send("kura....!!")
-})
+router.route("/")
+	.get((req,res,next)=>{
+		res.send(`${dst}.....!!`)
+	})
+	.post((req,res,next)=>{
+		const busboy=Busboy({headers:req.headers})
+		
+		busboy.on("file",(name,file,info)=>{
+			const fileName=Etc.naming()+"_"+info.filename
+			
+			file.pipe(Fs.createWriteStream(Path.join(path,fileName)))
+			file.on("close",()=>{
+				return res.sendStatus(200).json({
+					"fileName":fileName,
+				}).catch("err",(err)=>{
+					return next(err)
+				})
+			})
+		})
+		req.pipe(busboy)
+	})
 
 router.get("/stat",(req,res,next)=>{
-	const path=Path.join(__dirname,"..",dst)
 	Fs.readdir(path,(err,data)=>{
 		if (!err) {
 			const fileNames=data
@@ -55,31 +73,13 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 		}
 	}
 
-	const path=Path.join(__dirname,"..",dst,url.mono)
+	const fileToUpload=Path.join(path,url.mono)
 
-	Fs.access(path,(err)=>{
-		if (!err && Fs.lstatSync(path).isFile()) return res.download(path)
+	Fs.access(fileToUpload,(err)=>{
+		if (!err) return res.download(fileToUpload)
 		err.message=Etc.redacting(e.message)
 		return next(err)
 	})
-})
-
-router.post("/",(req,res,next)=>{
-	const path=Path.join(__dirname,"..",dst)
-	const busboy=Busboy({headers:req.headers,highWaterMark:1024**3*5})
-
-	busboy.on("files",(file,info)=>{
-		const fileName=Etc.naming()+"_"+info.filename
-
-		file.pipe(Fs.createWriteStream(Path.join(path,fileName)))
-		file.on("close",()=>{
-			return res.json({
-				"result":0,
-				"fileName":fileName
-			}).catch("err",(err)=>{return next(err)})
-		})
-	})
-	req.pipe(busboy)
 })
 
 module.exports=router

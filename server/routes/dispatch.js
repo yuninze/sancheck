@@ -5,7 +5,7 @@ const Etc=require("../etc")
 const router=Express.Router()
 
 router.get("/",(req,res,next)=>{
-	res.sendFile(Path.join(__dirname,"..","res","ragu.png"))
+	res.sendFile(Path.join(__dirname,"..","res","sloth.png"))
 })
 
 router.get("/stat",(req,res)=>{

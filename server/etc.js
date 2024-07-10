@@ -10,7 +10,7 @@ function isNumeric(str) {
 function naming() {
 	const timing = (Date.now()).toString()
 	let mixing = (Math.round(Math.random() * 10 ** 8)).toString()
-	for (const l = mixing.length; l < 8; l++) mixing = "0" + mixing
+	for (const l=mixing.length; l<8; l++) mixing="0"+mixing
 	return timing + "_" + mixing
 }
 
@@ -39,7 +39,9 @@ function redacting(string) {
 function nikkiYomi(cb) {
 	Fs.readFile(nikkiFile,"utf8",(err,data)=>{
 		if (err) return cb(err)
-		cb(null,JSON.parse(data).naiyou)
+		cb(null,
+			JSON.parse(data).naiyou
+		)
 	})
 }
 
@@ -48,9 +50,12 @@ function nikkiKaki(ato) {
 		if (err) return cb(err)
 		Fs.writeFile(
 			nikkiFile,
-			JSON.stringify({"naiyou":data.concat(ato)}),
+			JSON.stringify(
+				{"naiyou":data.concat(ato)}
+			),
 			{encoding:"utf8",flags:"w"},
-			(err)=>{if (err) return err})
+			(err)=>{if (err) return err}
+		)
 	})
 }
 
