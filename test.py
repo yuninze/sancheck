@@ -48,12 +48,20 @@ def hello(
             sleep(delay)
         print(f"{ornament} Sending {file} ({extern[file]/1024**2:.2f} MiB)")
         if os.path.getsize(file)<fileSizeLimit:
+<<<<<<< HEAD
             with open(file,"rb",buffering=1024**3*4) as fileContent:
                 resp=session.post(
                     dst,
                     files={"file":fileContent},
                     timeout=3
                 )
+=======
+            with open(file,"rb") as fileContent:
+                resp=session.post(
+                    dst,
+                    files={"file":fileContent},
+                ).json()
+>>>>>>> ccc2ed898345d6564b00ac2c37485c36bcc04bf6
         else:
             raise NotImplementedError("https://github.com/python/cpython/issues/110467")
             fileData=MultipartEncoder(
@@ -66,9 +74,15 @@ def hello(
                     data=fileData,
                     headers={"Content-Type":fileData.content_type},
                     timeout=None
+<<<<<<< HEAD
             )
         print(ornament,resp)
         return resp.json()
+=======
+            ).json()
+        print(ornament,resp)
+        return resp
+>>>>>>> ccc2ed898345d6564b00ac2c37485c36bcc04bf6
 
     if os.path.isdir(externPath):
         extern={q.path:q.stat().st_size for q in os.scandir(externPath) if q.is_file()}
@@ -80,17 +94,40 @@ def hello(
         raise OSError(f"{externPath} does not exist")
     
     session=requests.Session()
+<<<<<<< HEAD
     session.mount("https://",requests.adapters.HTTPAdapter(max_retries=3))
     
     session.cert=cert if os.path.exists(cert) else None
     print(ornament,f"cs Cert of the session is {session.cert}.")
+=======
+    adapter=requests.adapters.HTTPAdapter(max_retries=50)
+    session.mount("https://",adapter)
+    
+    if cert:
+        session.verify=cert if os.path.exists(cert) else False
+    elif cert is None:
+        session.verify=True
+    else:
+        session.verify=False
+    print(ornament,f"Cert for this session is {session.verify}.")
+>>>>>>> ccc2ed898345d6564b00ac2c37485c36bcc04bf6
     
     if multi:
         return list(chain.from_iterable(
             [[_post(dst,q,extern[q],multi=multi) for q in extern] for w in range(repeat)]
         ))
+<<<<<<< HEAD
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
     
 hello(dst,cert,externPath)
 
 # python ./sancheck/test.py d:/yuninze/downloads/sloth.png
+=======
+    return [_post(dst,list(extern.keys())[0],multi=multi) for q in range(repeat)]
+    
+dst="https://sanbo.space/kura"
+cert=True
+externPath=sys.argv[1]
+
+hello(dst,cert,externPath)
+>>>>>>> ccc2ed898345d6564b00ac2c37485c36bcc04bf6
