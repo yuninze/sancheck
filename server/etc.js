@@ -36,27 +36,53 @@ function redacting(string) {
 	return c + ".." + d
 }
 
+function nikkiNew() {
+	const naiyou={"naiyou":[]}
+	Fs.writeFileSync(
+		nikkiFile,
+		JSON.stringify(naiyou),
+		{encoding:"utf8",flags:"w"}
+	)
+	console.log("New nikkiFile been writtern.")
+	return naiyou
+}
+
+function nikkiMi(string) {
+	let naiyou
+	try {
+		naiyou=JSON.parse(string).naiyou
+	}
+	catch {
+		naiyou={"naiyou":[]}
+		console.log("New nikkiNaiyou been writtern.")
+	}
+	return naiyou
+}
+
 function nikkiYomi(cb) {
-	Fs.readFile(nikkiFile,"utf8",(err,data)=>{
-		if (err) return cb(err)
-		cb(null,
-			JSON.parse(data).naiyou
-		)
-	})
+	Fs.readFile(nikkiFile,"utf8",
+		(err,result)=>{
+			if (err) {
+				cb(null,nikkiNew())
+			}
+			else {
+				cb(null,nikkiMi(result).naiyou)
+			}
+		}
+	)
 }
 
 function nikkiKaki(ato) {
-	nikkiYomi((err,data)=>{
-		if (err) return cb(err)
-		Fs.writeFile(
-			nikkiFile,
-			JSON.stringify(
-				{"naiyou":data.concat(ato)}
-			),
-			{encoding:"utf8",flags:"w"},
-			(err)=>{if (err) return err}
-		)
-	})
+	nikkiYomi(
+		(err,result)=>{
+			const naiyou={"naiyou":result.concat(ato)}
+			Fs.writeFileSync(
+				nikkiFile,
+				JSON.stringify({"naiyou":naiyou}),
+				{encoding:"utf8",flags:"w"}
+			)
+		}
+	)
 }
 
 module.exports={
