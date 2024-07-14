@@ -9,8 +9,8 @@ from time import sleep
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
 ornament=" . "*3
-fileSizeLimit=1024**3*8
-chunkSize=1024**3*1
+fileSizeLimit=1024 ** 3 * 8
+chunkSize=1024 ** 3 * 1
 
 dst="https://sanbo.space/kura"
 cert="./yuninze/res/sodok.crt"
@@ -48,12 +48,12 @@ def hello(
             sleep(delay)
         print(f"{ornament} Sending {file} ({extern[file]/1024**2:.2f} MiB)")
         if os.path.getsize(file)<fileSizeLimit:
-            with open(file,"rb",buffering=1024**3*4) as fileContent:
+            with open(file,"rb",buffering=1024**3*1) as fileContent:
                 resp=session.post(
                     dst,
                     files={"file":fileContent},
                     timeout=3
-                )
+                ).json()
         else:
             raise NotImplementedError("https://github.com/python/cpython/issues/110467")
             fileData=MultipartEncoder(
@@ -62,13 +62,13 @@ def hello(
                 }
             )
             resp=session.post(
-                dst,
-                data=fileData,
-                headers={"Content-Type":fileData.content_type},
-                timeout=None
-            )
+                    dst,
+                    data=fileData,
+                    headers={"Content-Type":fileData.content_type},
+                    timeout=None
+            ).json()
         print(ornament,resp)
-        return resp.json()
+        return resp
 
     if os.path.isdir(externPath):
         extern={q.path:q.stat().st_size for q in os.scandir(externPath) if q.is_file()}
@@ -91,5 +91,5 @@ def hello(
         ))
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
     
-hello(dst,cert,externPath)
 # python ./sancheck/test.py d:/yuninze/downloads/sloth.png
+hello(dst,cert,externPath)
