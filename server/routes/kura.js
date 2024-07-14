@@ -21,10 +21,8 @@ router.route("/")
 			
 			file.pipe(Fs.createWriteStream(Path.join(path,fileName)))
 			file.on("close",()=>{
-				return res.sendStatus(200).json({
-					"fileName":fileName,
-				}).catch("err",(err)=>{
-					return next(err)
+				return res.json({
+					"fileName":fileName,"result":0
 				})
 			})
 		})

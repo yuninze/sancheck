@@ -9,19 +9,6 @@ const server=Express()
 const repo="/home/yuninze/code/sancheck/server"
 process.chdir(repo)
 
-server.set("json spaces",2)
-server.use(Express.static("./public"))
-server.use(Limit({windowMs:1000 * 10,max:32}))
-
-const sieve=require("./routes/sieve")
-const dispatch=require("./routes/dispatch")
-const kura=require("./routes/kura")
-const baseline=require("./routes/baseline")
-server.use("*",sieve)
-server.use("/",dispatch)
-server.use("/kura",kura)
-server.use("/baseline",baseline)
-
 class Cert {
 	constructor() {
 		this.key=Fs.readFileSync(
@@ -38,6 +25,18 @@ class Cert {
 		)
 	}
 }
+
+server.use(Limit({windowMs:1000 * 10,max:32}))
+server.use(Express.static("./public"))
+
+const sieve=require("./routes/sieve")
+const dispatch=require("./routes/dispatch")
+const kura=require("./routes/kura")
+const baseline=require("./routes/baseline")
+server.use("*",sieve)
+server.use("/",dispatch)
+server.use("/kura",kura)
+server.use("/baseline",baseline)
 
 server.use((err,req,res,next)=>{
 	res.status(500)
@@ -63,8 +62,10 @@ try {
 	const httpsCert=new Cert()
 	const httpsServer=Https.createServer(httpsCert,server)
 	httpsServer.listen(listenPort[0],listenAddress,()=>{})
-} catch (err) {
+}
+catch (err) {
 	console.log("CertError:",Etc.redacting(err.message))
-} finally {
+} 
+finally {
 	server.listen(listenPort[1],listenAddress,()=>{})
 }
