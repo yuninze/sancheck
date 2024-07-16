@@ -8,7 +8,7 @@ from random import random
 from time import sleep
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
-ornament=" . "*3
+ornament=" ❤️ " * 2
 fileSizeLimit=1024 ** 3 * 8
 chunkSize=1024 ** 3 * 1
 
@@ -52,7 +52,7 @@ def hello(
                 resp=session.post(
                     dst,
                     files={"file":fileContent},
-                    timeout=3
+                    timeout=10
                 ).json()
         else:
             raise NotImplementedError("https://github.com/python/cpython/issues/110467")
@@ -80,7 +80,7 @@ def hello(
         raise OSError(f"{externPath} does not exist")
     
     session=requests.Session()
-    session.mount("https://",requests.adapters.HTTPAdapter(max_retries=3))
+    session.mount("https://",requests.adapters.HTTPAdapter(max_retries=10))
     
     session.cert=cert if os.path.exists(cert) else None
     print(ornament,f"cs Cert of the session is {session.cert}.")
@@ -91,5 +91,6 @@ def hello(
         ))
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
     
-# python ./sancheck/test.py d:/yuninze/downloads/sloth.png
 hello(dst,cert,externPath)
+
+# python ./sancheck/test.py d:/yuninze/downloads/sloth.png
