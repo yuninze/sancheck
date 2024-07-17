@@ -8,7 +8,7 @@ from random import random
 from time import sleep
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
-ornament=" ❤️ " * 2
+ornament=" ❤️ " * 3
 fileSizeLimit=1024 ** 3 * 8
 chunkSize=1024 ** 3 * 1
 
