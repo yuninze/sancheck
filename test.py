@@ -9,7 +9,7 @@ from time import sleep
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
 ornament=" ❤️ " * 3
-fileSizeLimit=1024 ** 3 * 8
+fileSizeLimit=1024 ** 3 * 4
 chunkSize=1024 ** 3 * 1
 
 dst="https://sanbo.space/kura"
@@ -52,7 +52,7 @@ def hello(
                 resp=session.post(
                     dst,
                     files={"file":fileContent},
-                    timeout=10
+                    timeout=60 * 30
                 ).json()
         else:
             raise NotImplementedError("https://github.com/python/cpython/issues/110467")
