@@ -1,13 +1,11 @@
 const Express=require("express")
 const Limit=require("express-rate-limit")
+const Http=require("http")
 const Https=require("https")
 const Fs=require("fs")
 const Etc=require("./etc")
 
-const server=Express()
-
 const repo="/home/yuninze/code/sancheck/server"
-process.chdir(repo)
 
 class Cert {
 	constructor() {
@@ -26,19 +24,21 @@ class Cert {
 	}
 }
 
-server.use(Limit({windowMs:1000 * 10,max:32}))
-server.use(Express.static("./public"))
-
+const app=Express()
 const sieve=require("./routes/sieve")
 const dispatch=require("./routes/dispatch")
 const kura=require("./routes/kura")
 const baseline=require("./routes/baseline")
-server.use("*",sieve)
-server.use("/",dispatch)
-server.use("/kura",kura)
-server.use("/baseline",baseline)
 
-server.use((err,req,res,next)=>{
+process.chdir(repo)
+
+app.use(Limit({windowMs:1000 * 10,max:32}))
+app.use(Express.static("./public"))
+app.use("*",sieve)
+app.use("/",dispatch)
+app.use("/kura",kura)
+app.use("/baseline",baseline)
+app.use((err,req,res,next)=>{
 	res.status(500)
 	if (typeof err==="undefined") {
 		res.json({
@@ -55,17 +55,21 @@ server.use((err,req,res,next)=>{
 	}
 })
 
-const listenPort=[4430,17310]
-const listenAddress="0.0.0.0"
+const ports=[4430,17310]
+const addr="0.0.0.0"
+let server
+let port
 
 try {
 	const httpsCert=new Cert()
-	const httpsServer=Https.createServer(httpsCert,server)
-	httpsServer.listen(listenPort[0],listenAddress,()=>{})
+	server=Https.createServer(httpsCert,app)
+	port=ports[0]
 }
 catch (err) {
-	console.log("CertError:",Etc.redacting(err.message))
+	console.log("Fallback:",Etc.redacting(err.message))
+	server=Http.createServer(app)
+	port=ports[1]
 } 
 finally {
-	server.listen(listenPort[1],listenAddress,()=>{})
+	server.listen(port,addr,()=>{})
 }

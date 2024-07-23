@@ -5,7 +5,8 @@ const router=Express.Router()
 
 const session={}
 const blockWords=[
-	"php","cgi","wget","dns","chmod","./"
+	"php","cgi","wget","dns","chmod","sh",
+	"remote","vscode","sftp","./"
 ]
 
 router.all("*",(req,res,next)=>{
