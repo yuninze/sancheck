@@ -2,6 +2,7 @@ const Express=require("express")
 const Limit=require("express-rate-limit")
 const Http=require("http")
 const Https=require("https")
+const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
 
@@ -38,6 +39,11 @@ app.use("*",sieve)
 app.use("/",dispatch)
 app.use("/kura",kura)
 app.use("/baseline",baseline)
+app.use((req,res,next)=>{
+	res.status(404).sendFile(
+		Path.join(repo,"/public/404.png")
+	)
+})
 app.use((err,req,res,next)=>{
 	res.status(500)
 	if (typeof err==="undefined") {
