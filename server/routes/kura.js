@@ -67,7 +67,7 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 		if (Object.values(err.spec).some((v)=>v)) {
 			err.message=Object.keys(err.spec).filter(
 				(spec)=>{if (err.spec[spec]) return true}).join(", ")
-			return next(err)
+			next(err)
 		}
 	}
 
@@ -75,8 +75,8 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 
 	Fs.access(fileToUpload,(err)=>{
 		if (!err) return res.download(fileToUpload)
-		err.message=Etc.redacting(e.message)
-		return next(err)
+		err.message=Etc.redacting(err.message)
+		next(err)
 	})
 })
 
