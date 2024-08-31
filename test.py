@@ -1,14 +1,16 @@
 import os
 import sys
 import requests
+
 from collections.abc import Iterable
 from functools import partial
 from itertools import chain
 from random import random
 from time import sleep
+
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
-ornament=" ❤️ " * 3
+ornament=" ❤️ " * 5
 fileSizeLimit=1024 ** 3 * 4
 chunkSize=1024 ** 3 * 1
 
@@ -81,9 +83,9 @@ def hello(
     
     session=requests.Session()
     session.mount("https://",requests.adapters.HTTPAdapter(max_retries=10))
+    session.verify=cert if os.path.exists(cert) else None
     
-    session.cert=cert if os.path.exists(cert) else None
-    print(ornament,f"cs Cert of the session is {session.cert}.")
+    print(ornament,f"The cert of session is {session.verify}.")
     
     if multi:
         return list(chain.from_iterable(
@@ -92,5 +94,3 @@ def hello(
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
     
 hello(dst,cert,externPath)
-
-# python ./sancheck/test.py d:/yuninze/downloads/sloth.png
