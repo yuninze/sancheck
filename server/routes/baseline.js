@@ -14,12 +14,16 @@ const namae=[
   "RESULT"
 ]
 
-const dataFile=Path.join(__dirname,"..","res","baseline.feather")
+const dataFile=Path.join(__dirname,"..","res","baseline.f")
 const data=Arrow.tableFromIPC(Fs.readFileSync(dataFile))
+const schema=data.schema.fields
 
 router.route("/")
   .get((req,res,next)=>{
-    res.json(data.slice(0,5).toArray())
+    const d={}
+    d.schema=schema
+    d.data=data.slice(0,5).toArray()
+    res.json(d)
   })
 
   .post((req,res,next)=>{

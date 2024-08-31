@@ -25,7 +25,7 @@ router.all("*",(req,res,next)=>{
 		
 		console.log(session)
 		Etc.nikkiKaki([session])
-
+		
 		if (session.result===1) return res.end()
 		
 		return next()
