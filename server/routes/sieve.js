@@ -5,7 +5,7 @@ const router=Express.Router()
 
 const session={}
 const blockWords=[
-	"php","cgi","wget","dns","chmod","sh",
+	"php","cgi","asp","wget","dns","chmod","sh",
 	"remote","vscode","sftp","./"
 ]
 

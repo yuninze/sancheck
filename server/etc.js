@@ -48,25 +48,24 @@ function nikkiNew() {
 }
 
 function nikkiMi(string) {
-	let naiyou
+	let nikkiContent
 	try {
-		naiyou=JSON.parse(string).naiyou
+		nikkiContent=JSON.parse(string)
 	}
 	catch {
-		naiyou={"naiyou":[]}
-		console.log("New nikkiNaiyou been writtern.")
+		nikkiContent={"naiyou":[]}
 	}
-	return naiyou
+	return nikkiContent
 }
 
 function nikkiYomi(cb) {
 	Fs.readFile(nikkiFile,"utf8",
-		(err,result)=>{
+		(err,nikkiContent)=>{
 			if (err) {
 				cb(null,nikkiNew())
 			}
 			else {
-				cb(null,nikkiMi(result).naiyou)
+				cb(null,nikkiMi(nikkiContent).naiyou)
 			}
 		}
 	)
@@ -74,11 +73,18 @@ function nikkiYomi(cb) {
 
 function nikkiKaki(ato) {
 	nikkiYomi(
-		(err,result)=>{
-			const naiyou={"naiyou":result.concat(ato)}
+		(err,naiyou)=>{
+			let _naiyou
+			
+			if (naiyou.length>0) {
+				_naiyou={"naiyou":ato.concat(naiyou)}
+			} else {
+				_naiyou={"naiyou":ato}
+			}
+
 			Fs.writeFileSync(
 				nikkiFile,
-				JSON.stringify({"naiyou":naiyou}),
+				JSON.stringify(_naiyou),
 				{encoding:"utf8",flags:"w"}
 			)
 		}

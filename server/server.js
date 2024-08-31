@@ -61,7 +61,7 @@ app.use((err,req,res,next)=>{
 	}
 })
 
-const ports=[4430,17310]
+const ports=[4430,8023]
 const addr="0.0.0.0"
 let server
 let port
