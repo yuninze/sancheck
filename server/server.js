@@ -29,16 +29,18 @@ const app=Express()
 const sieve=require("./routes/sieve")
 const dispatch=require("./routes/dispatch")
 const kura=require("./routes/kura")
-const baseline=require("./routes/baseline")
+const show=require("./routes/show")
 
 process.chdir(repo)
 
 app.use(Limit({windowMs:1000 * 10,max:32}))
 app.use(Express.static("./public"))
+app.use(Express.json())
 app.use("*",sieve)
 app.use("/",dispatch)
 app.use("/kura",kura)
-app.use("/baseline",baseline)
+app.use("/show",show)
+
 app.use((req,res,next)=>{
 	res.status(404).sendFile(
 		Path.join(repo,"/public/404.png")

@@ -10,8 +10,8 @@ from time import sleep
 
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
-ornament=" ❤️ " * 5
-fileSizeLimit=1024 ** 3 * 4
+ornament=" ❤️ " * 3
+fileSizeLimit=1024 ** 3 * 5
 chunkSize=1024 ** 3 * 1
 
 dst="https://sanbo.space/kura"
@@ -50,24 +50,28 @@ def hello(
             sleep(delay)
         print(f"{ornament} Sending {file} ({extern[file]/1024**2:.2f} MiB)")
         if os.path.getsize(file)<fileSizeLimit:
-            with open(file,"rb",buffering=1024**3*1) as fileContent:
+            with open(file,"rb",buffering=chunkSize) as fileContent:
                 resp=session.post(
                     dst,
                     files={"file":fileContent},
-                    timeout=60 * 30
+                    timeout=300
                 ).json()
         else:
-            raise NotImplementedError("https://github.com/python/cpython/issues/110467")
+            # raise NotImplementedError("https://github.com/python/cpython/issues/110467")
             fileData=MultipartEncoder(
                 fields={
-                    "files":(os.path.split(file)[1], open(file,"rb",buffering=1024**3*1), "text/plain")
+                    "files":(
+                        os.path.split(file)[1],
+                        open(file,"rb",buffering=chunkSize),
+                        "text/plain"
+                    )
                 }
             )
             resp=session.post(
                     dst,
                     data=fileData,
                     headers={"Content-Type":fileData.content_type},
-                    timeout=None
+                    timeout=300
             ).json()
         print(ornament,resp)
         return resp
@@ -83,7 +87,7 @@ def hello(
     
     session=requests.Session()
     session.mount("https://",requests.adapters.HTTPAdapter(max_retries=10))
-    session.verify=cert if os.path.exists(cert) else None
+    if os.path.exists(cert):session.verify=cert
     
     print(ornament,f"The cert of session is {session.verify}.")
     

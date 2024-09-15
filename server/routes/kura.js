@@ -54,7 +54,7 @@ router.get("/stat",(req,res,next)=>{
 router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 	const url={...req.params}
 
-	let err=Error()
+	let err=new Error()
 	err.spec={
 		private:url.mono.length>18,
 		keys:Object.keys(url)?Object.keys(url).length<2:true,

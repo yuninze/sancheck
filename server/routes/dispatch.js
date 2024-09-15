@@ -1,14 +1,15 @@
+const Fs=require("fs")
 const Express=require("express")
 const Etc=require("../etc")
 
 const router=Express.Router()
 
 router.get("/",(req,res,next)=>{
-	res.send("done")
+	return res.send("dispatched 240903")
 })
 
 router.get("/stat",(req,res,next)=>{
-  Etc.nikkiYomi((err,data)=>res.json(data))
+  Etc.nikkiYomi((err,data)=>{return res.json(data)})
 })
 
 module.exports=router
