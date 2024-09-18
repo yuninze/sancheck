@@ -23,13 +23,16 @@ router.all("*",(req,res,next)=>{
 		if (blockWords.some(word=>(session.url.toLowerCase()).includes(word))) {
 			session.result=1
 		}
-		
-		console.log(session)
-		Etc.nikkiKaki([session])
-		
-		if (session.result===1) return res.end()
-		
-		return next()
+
+		if (!session.url.endsWith(".ico")) {
+			console.log(session)
+			console.log(" ㅡ ".repeat(5))
+			Etc.nikkiKaki([session])
+		}
+
+		if (session.result===1) {return res.end()}
+
+		next()
 	})
 
 module.exports=router

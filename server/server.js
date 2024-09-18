@@ -6,7 +6,10 @@ const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
 
-const repo="/home/yuninze/code/sancheck/server"
+// const repo="/home/yuninze/code/sancheck/server"
+const repo=__dirname
+const dog=Path.join(repo,"/public/404.png")
+const visitLimit=5
 
 class Cert {
 	constructor() {
@@ -29,45 +32,42 @@ const app=Express()
 const sieve=require("./routes/sieve")
 const dispatch=require("./routes/dispatch")
 const kura=require("./routes/kura")
-const show=require("./routes/show")
+const deta=require("./routes/deta")
 
 process.chdir(repo)
 
-app.use(Limit({windowMs:1000 * 10,max:32}))
+app.use(Limit({windowMs:1000*10,max:visitLimit}))
 app.use(Express.static("./public"))
 app.use(Express.json())
 app.use("*",sieve)
 app.use("/",dispatch)
 app.use("/kura",kura)
-app.use("/show",show)
+app.use("/deta",deta)
 
-app.use((req,res,next)=>{
-	res.status(404).sendFile(
-		Path.join(repo,"/public/404.png")
-	)
-})
 app.use((err,req,res,next)=>{
-	res.status(500)
-	if (typeof err==="undefined") {
-		res.json({
-			"result":1,
-			"msg":"Something Went Wrong",
-			"code":res.statusCode
-		})
-	} else {
+	if (err) {
+		console.log("Was an Error.")
 		res.json({
 			"result":1,
 			"msg":err.message,
-			"code":res.statusCode
+			"code":err.status,
+			"err":err
 		})
 	}
+	else {
+		next()
+	}
+})
+
+app.use((req,res)=>{
+	res.sendFile(dog)
 })
 
 const ports=[4430,8023]
 const addr="0.0.0.0"
+
 let server
 let port
-
 try {
 	const httpsCert=new Cert()
 	server=Https.createServer(httpsCert,app)

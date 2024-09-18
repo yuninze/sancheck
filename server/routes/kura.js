@@ -10,10 +10,10 @@ const dst="kura"
 const path=Path.join(__dirname,"..",dst)
 
 router.route("/")
-	.get((req,res,next)=>{
-		res.send(`${dst}.....!!`)
+	.get((req,res)=>{
+		res.send(`${dst}`)
 	})
-	.post((req,res,next)=>{
+	.post((req,res)=>{
 		const busboy=Busboy({headers:req.headers})
 		
 		busboy.on("file",(name,file,info)=>{
@@ -21,7 +21,7 @@ router.route("/")
 			
 			file.pipe(Fs.createWriteStream(Path.join(path,fileName)))
 			file.on("close",()=>{
-				return res.json({
+				res.json({
 					"fileName":fileName,"result":0
 				})
 			})
@@ -46,7 +46,7 @@ router.get("/stat",(req,res,next)=>{
 				})
 			})
 		} else {
-			return next(Etc.redacting(err))
+			next(Etc.redacting(err))
 		}
 	})
 })

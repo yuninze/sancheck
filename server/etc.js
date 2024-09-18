@@ -41,7 +41,7 @@ function nikkiNew() {
 	Fs.writeFileSync(
 		nikkiFile,
 		JSON.stringify(naiyou),
-		{encoding:"utf8",flags:"w"}
+		{encoding:"utf8",flags:"w+"}
 	)
 	console.log("New nikkiFile been writtern.")
 	return naiyou
