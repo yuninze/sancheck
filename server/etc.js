@@ -78,7 +78,8 @@ function nikkiKaki(ato) {
 			
 			if (naiyou.length>0) {
 				_naiyou={"naiyou":ato.concat(naiyou)}
-			} else {
+			}
+			else {
 				_naiyou={"naiyou":ato}
 			}
 

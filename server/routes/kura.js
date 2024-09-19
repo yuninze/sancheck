@@ -6,24 +6,20 @@ const Etc=require("../etc")
 
 const router=Express.Router()
 
-const dst="kura"
-const path=Path.join(__dirname,"..",dst)
+const path=Path.join(__dirname,"..",kura)
 
 router.route("/")
 	.get((req,res)=>{
-		res.send(`${dst}`)
+		res.send("kura")
 	})
+
 	.post((req,res)=>{
 		const busboy=Busboy({headers:req.headers})
-		
 		busboy.on("file",(name,file,info)=>{
 			const fileName=Etc.naming()+"_"+info.filename
-			
 			file.pipe(Fs.createWriteStream(Path.join(path,fileName)))
 			file.on("close",()=>{
-				res.json({
-					"fileName":fileName,"result":0
-				})
+				res.json({"fileName":fileName,"result":0})
 			})
 		})
 		req.pipe(busboy)
@@ -45,7 +41,8 @@ router.get("/stat",(req,res,next)=>{
 						{return false} else {return true}
 				})
 			})
-		} else {
+		}
+		else {
 			next(Etc.redacting(err))
 		}
 	})
@@ -74,9 +71,13 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 	const fileToUpload=Path.join(path,url.mono)
 
 	Fs.access(fileToUpload,(err)=>{
-		if (!err) return res.download(fileToUpload)
-		err.message=Etc.redacting(err.message)
-		next(err)
+		if (!err) {
+			return res.download(fileToUpload)
+		}
+		else {
+			err.message=Etc.redacting(err.message)
+			next(err)
+		}
 	})
 })
 

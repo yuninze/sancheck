@@ -36,15 +36,16 @@ router.get("/info",(req,res,next)=>{
     did_what.deta["shape"]=data.shape
     did_what.deta["info"]=Object.assign({},
       data.schema.fields.map(_data=>{
-      const x={}
-      x[_data.name]=_data.type.toString()
+        const x={}
+        x[_data.name]=_data.type.toString()
       })
     )
-
     res.json(did_what)
   }
+  else {
+    next()
+  }
 
-  next()
 })
 
 router.post("/about/:the",(req,res,next)=>{

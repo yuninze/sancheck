@@ -20,7 +20,9 @@ router.all("*",(req,res,next)=>{
 		session.url=req.originalUrl
 		session.result=0
 		
-		if (blockWords.some(word=>(session.url.toLowerCase()).includes(word))) {
+		if (blockWords.some(word=>
+			(session.url.toLowerCase()).includes(word)
+		)) {
 			session.result=1
 		}
 
@@ -30,7 +32,7 @@ router.all("*",(req,res,next)=>{
 			Etc.nikkiKaki([session])
 		}
 
-		if (session.result===1) {return res.end()}
+		if (session.result===1) return res.end()
 
 		next()
 	})

@@ -8,7 +8,9 @@ router.get("/",(req,res)=>{
 })
 
 router.get("/stat",(req,res)=>{
-  Etc.nikkiYomi((err,data)=>{return res.json(data)})
+  Etc.nikkiYomi((err,data)=>{
+    res.json(data)
+  })
 })
 
 module.exports=router

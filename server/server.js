@@ -6,10 +6,8 @@ const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
 
-// const repo="/home/yuninze/code/sancheck/server"
 const repo=__dirname
 const dog=Path.join(repo,"/public/404.png")
-const visitLimit=5
 
 class Cert {
 	constructor() {
@@ -36,7 +34,7 @@ const deta=require("./routes/deta")
 
 process.chdir(repo)
 
-app.use(Limit({windowMs:1000*10,max:visitLimit}))
+app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static("./public"))
 app.use(Express.json())
 app.use("*",sieve)
