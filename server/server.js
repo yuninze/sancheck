@@ -72,7 +72,7 @@ try {
 	port=ports[0]
 }
 catch (err) {
-	console.log("Fallback:",Etc.redacting(err.message))
+	console.log("Fallback:",Etc.redact(err.message))
 	server=Http.createServer(app)
 	port=ports[1]
 } 

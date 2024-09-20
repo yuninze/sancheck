@@ -28,7 +28,7 @@ function timing(itu) {
 	return chain.sa < 5000
 }
 
-function redacting(string) {
+function redact(string) {
 	const a = string.indexOf("'/")
 	const b = string.indexOf("/san")
 	const c = string.slice(0, a)
@@ -97,7 +97,7 @@ module.exports={
 	naming,
 	parsing,
 	timing,
-	redacting,
+	redact,
 	nikkiYomi,
 	nikkiKaki
 }

@@ -26,9 +26,8 @@ router.get("/info",(req,res,next)=>{
   const data=Pa.tableFromIPC(read_file(data_path))
   
   if (!err) {
-    data.shape=[data.numCols,data.numRows]
+    const data_shape=[data.numCols,data.numRows]
     const did_what={deta:{}}
-
     did_what.deta["shape"]=data.shape
     did_what.deta["info"]=Object.assign({},
       data.schema.fields.map(_data=>{
