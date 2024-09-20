@@ -6,8 +6,7 @@ const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
 
-const repo=__dirname
-const dog=Path.join(repo,"/public/404.png")
+const dog=Path.join(__dirname,"/public/404.png")
 
 class Cert {
 	constructor() {
@@ -32,7 +31,7 @@ const dispatch=require("./routes/dispatch")
 const kura=require("./routes/kura")
 const deta=require("./routes/deta")
 
-process.chdir(repo)
+process.chdir(__dirname)
 
 app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static("./public"))
@@ -66,6 +65,7 @@ const addr="0.0.0.0"
 
 let server
 let port
+
 try {
 	const httpsCert=new Cert()
 	server=Https.createServer(httpsCert,app)

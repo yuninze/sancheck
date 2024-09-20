@@ -6,7 +6,7 @@ const Etc=require("../etc")
 
 const router=Express.Router()
 
-const path=Path.join(__dirname,"..",kura)
+const path=Path.join(__dirname,"..","kura")
 
 router.route("/")
 	.get((req,res)=>{

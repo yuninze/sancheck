@@ -1,11 +1,7 @@
 const Express=require("express")
 const Path=require("path")
-const Fs=require("fs")
+const Fs=require("fs").promises
 const Pa=require("apache-arrow")
-// import * as Express from "express"
-// import * as Path from "path"
-// import * as Fs from "fs"
-// import * as Arrow from "apache-arrow"
 
 const router=Express.Router()
 
@@ -17,7 +13,8 @@ async function read_file(data_path) {
     return await content.arrayBuffer()
   }
   else {
-    return Fs.readFileSync(data_path)
+    const content=await Fs.readFile(data_path,"utf8")
+    return content
   }
 }
 
@@ -32,7 +29,6 @@ router.get("/info",(req,res,next)=>{
     data.shape=[data.numCols,data.numRows]
     const did_what={deta:{}}
 
-    // load metadata
     did_what.deta["shape"]=data.shape
     did_what.deta["info"]=Object.assign({},
       data.schema.fields.map(_data=>{
@@ -45,7 +41,6 @@ router.get("/info",(req,res,next)=>{
   else {
     next()
   }
-
 })
 
 router.post("/about/:the",(req,res,next)=>{
