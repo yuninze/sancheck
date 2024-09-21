@@ -6,8 +6,6 @@ const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
 
-const dog=Path.join(__dirname,"/public/404.png")
-
 class Cert {
 	constructor() {
 		this.key=Fs.readFileSync(
@@ -31,6 +29,8 @@ const dispatch=require("./routes/dispatch")
 const kura=require("./routes/kura")
 const deta=require("./routes/deta")
 
+const dog=Path.join(__dirname,"/public/dog.png")
+
 process.chdir(__dirname)
 
 app.use(Limit({windowMs:1000*10,max:5}))
@@ -43,12 +43,11 @@ app.use("/deta",deta)
 
 app.use((err,req,res,next)=>{
 	if (err) {
-		console.log("Was an Error.")
+		err.message=Etc.redact(err.message)
+		console.log(`Was an Error (${err.message})`)
 		res.json({
 			"result":1,
 			"msg":err.message,
-			"code":err.status,
-			"err":err
 		})
 	}
 	else {
@@ -57,6 +56,7 @@ app.use((err,req,res,next)=>{
 })
 
 app.use((req,res)=>{
+	console.log(`Was an Error (dog)`)
 	res.sendFile(dog)
 })
 

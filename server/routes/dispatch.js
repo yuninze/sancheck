@@ -1,13 +1,16 @@
 const Express=require("express")
+const Path=require("path")
 const Etc=require("../etc")
 
 const router=Express.Router()
 
 router.get("/",(req,res)=>{
-	res.send("240918")
+	res.sendFile(
+    Path.join(__dirname,"..","index.html")
+  )
 })
 
-router.get("/stat",(req,res)=>{
+router.get("/hx",(req,res)=>{
   Etc.nikkiYomi((err,data)=>{
     res.json(data)
   })

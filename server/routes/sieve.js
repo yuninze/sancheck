@@ -7,7 +7,7 @@ const session={}
 const blockWords=[
 	"php","cgi","asp",
 	"wget","chmod",
-	"remote","vscode","sftp","./"
+	"remote","vscode","sftp",".."
 ]
 
 router.all("*",(req,res,next)=>{

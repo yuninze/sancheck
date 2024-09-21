@@ -1,7 +1,7 @@
 const Path = require("path")
 const Fs = require("fs")
 
-const nikkiFile = Path.join("res", "nikki")
+const nikkiFile = Path.join("public", "nikki.json")
 
 function isNumeric(str) {
 	return !isNaN(parseFloat(str)) && isFinite(str)
@@ -29,11 +29,17 @@ function timing(itu) {
 }
 
 function redact(string) {
-	const a = string.indexOf("'/")
-	const b = string.indexOf("/san")
-	const c = string.slice(0, a)
-	const d = string.slice(b)
-	return c + ".." + d
+	if (string.includes("'")) {
+		const path_intern=string.slice(
+			string.indexOf("'"),string.lastIndexOf("'")+1
+		)
+		return string.replace(
+			path_intern,".."+path_intern.slice(Math.floor(path_intern.length/2)-5)
+		)
+	}
+	else {
+		return string
+	}
 }
 
 function nikkiNew() {

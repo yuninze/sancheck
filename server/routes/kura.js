@@ -35,15 +35,16 @@ router.get("/stat",(req,res,next)=>{
 			res.json({
 				"result":0,
 				"kazu":fileNames.length,
-				"saizu":(fileSizes.reduce((q,p)=>q+p,0) / 1024**2).toFixed(5),
+				"saizu":(fileSizes.reduce((q,p)=>q+p,0) / 1024**2),
 				"naiyou":fileNames.filter((fileName)=>{
-					if (Etc.isNumeric(fileName.substring(0,21).replace("_",""))) 
-						{return false} else {return true}
+					if (Etc.isNumeric(
+						fileName.substring(0,21).replace("_",""))
+					) {return false} else {return true}
 				})
 			})
 		}
 		else {
-			next(Etc.redacting(err))
+			next(err)
 		}
 	})
 })
@@ -75,7 +76,6 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 			return res.download(fileToUpload)
 		}
 		else {
-			err.message=Etc.redacting(err.message)
 			next(err)
 		}
 	})
