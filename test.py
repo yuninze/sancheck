@@ -10,13 +10,12 @@ from time import sleep
 
 from requests_toolbelt import StreamingIterator, MultipartEncoder
 
-ornament=" ❤️ " * 3
-fileSizeLimit=1024 ** 3 * 5
+ornament=" ❤️ " * 1
+fileSizeLimit=1024 ** 3 * 6
 chunkSize=1024 ** 3 * 1
 
 dst="https://sanbo.space/kura"
 cert="./yuninze/res/sodok.crt"
-externPath=sys.argv[1]
 
 def hello(
     dst,
@@ -48,7 +47,7 @@ def hello(
             delay=round(random()*3)
             print(ornament,f"\nWaiting {delay} second(s)")
             sleep(delay)
-        print(f"{ornament} Sending {file} ({extern[file]/1024**2:.2f} MiB)")
+        print(ornament,f"{file}={extern[file]/1024**2:.2f} MiB")
         if os.path.getsize(file)<fileSizeLimit:
             with open(file,"rb",buffering=chunkSize) as fileContent:
                 resp=session.post(
@@ -89,12 +88,16 @@ def hello(
     session.mount("https://",requests.adapters.HTTPAdapter(max_retries=10))
     if os.path.exists(cert):session.verify=cert
     
-    print(ornament,f"The cert of session is {session.verify}.")
+    print(ornament,f"session.verify={session.verify if session.verify else "none"}")
     
     if multi:
         return list(chain.from_iterable(
             [[_post(dst,q,extern[q],multi=multi) for q in extern] for w in range(repeat)]
         ))
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
-    
-hello(dst,cert,externPath)
+
+if sys.argv[1]:
+    externPath=sys.argv[1]
+    hello(dst,cert,externPath)
+else:
+    print(ornament,"A Switch Hasn't Been Provided.")
