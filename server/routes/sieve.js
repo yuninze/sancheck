@@ -28,7 +28,7 @@ router.all("*",(req,res,next)=>{
 
 		if (!session.url.endsWith(".ico")) {
 			console.log(session)
-			console.log(" ㅡ ".repeat(5))
+			console.log("ㅡ".repeat(3))
 			Etc.nikkiKaki([session])
 		}
 

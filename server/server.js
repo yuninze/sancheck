@@ -5,6 +5,7 @@ const Https=require("https")
 const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
+const Thing=require("./thing")
 
 class Cert {
 	constructor() {
@@ -28,10 +29,10 @@ const sieve=require("./routes/sieve")
 const dispatch=require("./routes/dispatch")
 const kura=require("./routes/kura")
 const deta=require("./routes/deta")
-
 const dog=Path.join(__dirname,"/public/dog.png")
 
-process.chdir(__dirname)
+Thing.go()
+Thing.create(alter=true)
 
 app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static("./public"))

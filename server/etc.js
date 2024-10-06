@@ -1,7 +1,7 @@
 const Path = require("path")
 const Fs = require("fs")
 
-const nikkiFile = Path.join("public", "nikki.json")
+const nikkiFile = Path.join("public", "nikki")
 
 function isNumeric(str) {
 	return !isNaN(parseFloat(str)) && isFinite(str)
@@ -34,7 +34,7 @@ function redact(string) {
 			string.indexOf("'"),string.lastIndexOf("'")+1
 		)
 		return string.replace(
-			path_intern,".."+path_intern.slice(Math.floor(path_intern.length/2)-5)
+			path_intern,".."+path_intern.slice(Math.floor(path_intern.length/2)-1)
 		)
 	}
 	else {
@@ -49,7 +49,7 @@ function nikkiNew() {
 		JSON.stringify(naiyou),
 		{encoding:"utf8",flags:"w+"}
 	)
-	console.log("New nikkiFile been writtern.")
+	console.log("New nikkiFile been written.")
 	return naiyou
 }
 
