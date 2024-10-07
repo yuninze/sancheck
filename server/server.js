@@ -31,8 +31,10 @@ const kura=require("./routes/kura")
 const deta=require("./routes/deta")
 const dog=Path.join(__dirname,"/public/dog.png")
 
-Thing.go()
-Thing.create(alter=true)
+// Thing.go()
+// Thing.create(alter=true)
+
+process.chdir(__dirname)
 
 app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static("./public"))

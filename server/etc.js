@@ -1,7 +1,7 @@
 const Path = require("path")
 const Fs = require("fs")
 
-const nikkiFile = Path.join("public", "nikki")
+const nikkiFile=Path.join("public","nikki")
 
 function isNumeric(str) {
 	return !isNaN(parseFloat(str)) && isFinite(str)
