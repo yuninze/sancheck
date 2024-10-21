@@ -8,9 +8,10 @@ const router=Express.Router()
 const file_name="feature.f"
 const file_path=Path.join(__dirname,"..","kura",file_name)
 
-async function read_file_url(file_path) {
-  const content=await fetch(file_path)
-  return await Buffer.from(content)
+function read_from(file_path,cb) {
+  fetch(file_path)
+    .then(res=>{cb(null,Buffer.from(res))})
+    .catch(err=>{cb(err,null)})
 }
 
 router.get("/",(req,res)=>{

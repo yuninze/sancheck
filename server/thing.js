@@ -2,32 +2,34 @@ const Fs=require("fs")
 const Path=require("path")
 const Mongo=require("mongodb").MongoClient
 
-const pad="ㅡㅡㅡ Thing: "
+const pad="Thing: "
 const db_path="mongodb://localhost:23300"
 
-function create(alter=false,cb) {
-  if (alter) {
-    Mongo.connect(db_path,(err,db)=>{
-      if (err) throw err
-      const Cursor=db.db("deta")
-      Cursor.createCollection("_test",(err,res)=>{
-        if (err) throw err
-        console.log(res)
-        Cursor.close()
-      })
-    })
-  }
-  else {
-    
-  }
-}
-
-function go() {
-  console.log(`${pad}Connecting`)
-  Mongo.connect(db_path,(err,db)=>{
-    if (err) throw err
-    db.close()
+function connect(db_name,cb) {
+  Mongo.connect(db_path+db_name)
+  .then(db=>{
+    cb(null,db)
+  })
+  .catch(err=>{
+    cb(err,null)
   })
 }
 
-module.exports={create,go}
+function create(db_name,table_name,cb) {
+  connect(db_name)
+    .then(db=>{
+      db.createCollection(table_name)
+        .then(res=>{
+          db.close()
+          cb(err,`${pad}Created ${table_name}`)
+        })
+        .catch(err=>{
+          throw err
+        })
+    })
+    .catch(err=>{
+      cb(err,null)
+    })
+}
+
+module.exports={connect,create}
