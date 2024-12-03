@@ -4,10 +4,9 @@ const Etc=require("../etc")
 const router=Express.Router()
 
 const session={}
-const blockWords=[
-	"php","cgi","asp",
-	"wget","chmod",
-	"remote","vscode","sftp",".."
+const blockWord=[
+	"php","cgi","asp","wget","chmod","remote",
+	"vscode","sftp","..","/.","env","aws"
 ]
 
 router.all("*",(req,res,next)=>{
@@ -20,7 +19,7 @@ router.all("*",(req,res,next)=>{
 		session.url=req.originalUrl
 		session.result=0
 		
-		if (blockWords.some(word=>
+		if (blockWord.some(word=>
 			(session.url.toLowerCase()).includes(word)
 		)) {
 			session.result=1

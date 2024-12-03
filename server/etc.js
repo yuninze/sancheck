@@ -1,7 +1,8 @@
 const Path = require("path")
 const Fs = require("fs")
 
-const nikkiFile=Path.join("public","nikki")
+const keyFile = Path.join("/home/yuninze/res/", "sancheck.key")
+const nikkiFile = Path.join("public","nikki")
 
 function isNumeric(str) {
 	return !isNaN(parseFloat(str)) && isFinite(str)
@@ -19,7 +20,7 @@ function parsing(url) {
 }
 
 function timing(itu) {
-	const key = Fs.readFileSync("./res/sancheck", "utf8").split(",").map(q => parseInt(q))
+	const key = Fs.readFileSync(keyFile, "utf8").split(",").map(q => parseInt(q))
 	const chain = {
 		itu: parseInt(itu.toString().slice(0, key[1])),
 		now: parseInt((Date.now() * key[0]).toString().slice(0, key[1]))

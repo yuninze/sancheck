@@ -31,8 +31,6 @@ const kura=require("./routes/kura")
 const deta=require("./routes/deta")
 const dog=Path.join(__dirname,"/public/dog.png")
 
-// Thing.go()
-
 process.chdir(__dirname)
 
 app.use(Limit({windowMs:1000*10,max:5}))
@@ -45,11 +43,11 @@ app.use("/deta",deta)
 
 app.use((err,req,res,next)=>{
 	if (err) {
-		err.message=Etc.redact(err.message)
 		console.log(`Was an Error (${err.message})`)
+		const errRedacted = Etc.redact(err.message)
 		res.json({
 			"result":1,
-			"msg":err.message,
+			"msg":errRedacted,
 		})
 	}
 	else {
@@ -58,7 +56,7 @@ app.use((err,req,res,next)=>{
 })
 
 app.use((req,res)=>{
-	console.log(`Was an Error (dog)`)
+	console.log("Was an Error (dog)")
 	res.sendFile(dog)
 })
 
@@ -74,10 +72,10 @@ try {
 	port=ports[0]
 }
 catch (err) {
-	console.log("Fallback:",Etc.redact(err.message))
+	console.log(`Fallback: ${err.message}`)
 	server=Http.createServer(app)
 	port=ports[1]
-} 
+}
 finally {
 	server.listen(port,addr,()=>{})
 }

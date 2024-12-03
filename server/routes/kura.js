@@ -73,6 +73,7 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 
 	Fs.access(fileToUpload,(err)=>{
 		if (!err) {
+			console.log(`The filename in the request was: ${fileToUpload}`)
 			return res.download(fileToUpload)
 		}
 		else {

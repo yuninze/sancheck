@@ -8,7 +8,7 @@ from itertools import chain
 from random import random
 from time import sleep
 
-from requests_toolbelt import StreamingIterator, MultipartEncoder
+from requests_toolbelt import MultipartEncoder
 
 ornament=" ❤️ " * 1
 fileSizeLimit=1024 ** 3 * 6
