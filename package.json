@@ -2,12 +2,12 @@
   "dependencies": {
     "apache-arrow": "^16.1.0",
     "connect-busboy": "^1.0.0",
-    "express": "^4.21.0",
+    "express": "^4.21.1",
     "express-rate-limit": "^5.5.1",
     "sqlite3": "^5.1.7"
   },
   "name": "sancheck",
-  "version": "240901",
+  "version": "2401",
   "description": "sancheck",
   "main": "./server/server.js",
   "scripts": {
@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yuninze/sancheck.git"
+    "url": "git+https://github.com/beeseosil/sancheck.git"
   },
-  "author": "inze",
+  "author": "yuninze",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yuninze/sancheck/issues"
+    "url": "https://github.com/beeseosil/sancheck/issues"
   },
-  "homepage": "https://github.com/yuninze/sancheck#readme"
+  "homepage": "https://github.com/beeseosil/sancheck"
 }
