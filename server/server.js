@@ -5,7 +5,6 @@ const Https=require("https")
 const Path=require("path")
 const Fs=require("fs")
 const Etc=require("./etc")
-const Thing=require("./thing")
 
 class Cert {
 	constructor() {
