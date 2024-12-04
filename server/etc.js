@@ -1,8 +1,13 @@
 const Path = require("path")
 const Fs = require("fs")
 
-const keyFile = Path.join("/home/yuninze/res/", "sancheck.key")
-const nikkiFile = Path.join("public","nikki")
+const keyFile = "./public/sancheck.key"
+const nikkiFile = "./public/nikki.json"
+
+function claim(about) {
+	console.log("ㅡ".repeat(5), about)
+	return 
+}
 
 function isNumeric(str) {
 	return !isNaN(parseFloat(str)) && isFinite(str)
@@ -100,6 +105,7 @@ function nikkiKaki(ato) {
 }
 
 module.exports={
+	claim,
 	isNumeric,
 	naming,
 	parsing,

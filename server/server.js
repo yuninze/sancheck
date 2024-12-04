@@ -24,11 +24,11 @@ class Cert {
 }
 
 const app=Express()
-const sieve=require("./routes/sieve")
-const dispatch=require("./routes/dispatch")
-const kura=require("./routes/kura")
-const deta=require("./routes/deta")
-const dog=Path.join(__dirname,"/public/dog.png")
+const sieve=require("./route/sieve")
+const dispatch=require("./route/dispatch")
+const kura=require("./route/kura")
+// const deta=require("./route/deta")
+const dog=Path.join("/public/dog.png")
 
 process.chdir(__dirname)
 
