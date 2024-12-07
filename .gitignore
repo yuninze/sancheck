@@ -1,4 +1,3 @@
 node_modules/
-server/public/
-server/res/
-server/kura
+server/public/*
+server/kura/*

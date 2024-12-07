@@ -7,9 +7,23 @@ const Etc = require("../etc")
 
 const router=Express.Router()
 
-const dbPointer = new Sqlite.DatabaseSync(":memory:")
-const dbPath = '../public/database.db'
+const dbPointer = new Sqlite.DatabaseSync(':memory:')
+const dbPath = Path.join(dirname__,'..','/public/database.db')
 const db = new Sqlite.DatabaseSync(dbPath)
+
+const init = `
+  create table if not exists coordinate (
+    y integer primary key,
+    x integer not null unique 
+  )
+  
+  create table if not exists element (
+    foreign key (ind) references coordinate (x),
+    foreign key (col) references coordinate (y),
+    elem nvarchar(32) not null,
+	 name nvarchar(32) not null
+  )
+`
 
 const select = dbPointer.prepare(`
   select ind,pad,com from tablename limit 5
@@ -18,19 +32,6 @@ const select = dbPointer.prepare(`
 const insert = dbPointer.prepare(`
   insert into tablename (ind, arr, pad, com) values (?, ?, ?, ?)
 `)
-
-function _create_table() {
-  dbPointer.exec(`
-    create table tablename (
-      ind integer primary key,
-      arr nvarchar(32),
-      pad null,
-      com nvarchar(64)
-    )
-  `)
-  Etc.claim("A Table Created.")
-  return true
-}
 
 function _insert(max) {
   for (let q = 0; q < max+1; q+=1) {
