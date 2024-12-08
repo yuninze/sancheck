@@ -27,7 +27,7 @@ const app=Express()
 const sieve=require("./route/sieve")
 const dispatch=require("./route/dispatch")
 const kura=require("./route/kura")
-// const deta=require("./route/deta")
+const deta=require("./route/deta")
 const dog=Path.join("/public/dog.png")
 
 process.chdir(__dirname)
@@ -71,10 +71,12 @@ try {
 	port=ports[0]
 }
 catch (err) {
-	console.log(`Fallback: ${err.message}`)
+	Etc.claim(`HTTP Fallback: ${err.message}`)
 	server=Http.createServer(app)
 	port=ports[1]
 }
 finally {
-	server.listen(port,addr,()=>{})
+	server.listen(port,addr,()=>{
+
+	})
 }

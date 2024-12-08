@@ -1,52 +1,36 @@
-const Express=require('express')
 const Path=require('path')
 const Fs=require('fs')
+const Etc=require('../etc')
+const Express=require('express')
 const Pa=require('apache-arrow')
-const Sqlite = require('node:sqlite')
-const Etc = require("../etc")
+const DataIntern = require('./dataIntern')
 
-const router=Express.Router()
+const db=DataIntern.db
 
-const dbPointer = new Sqlite.DatabaseSync(':memory:')
-const dbPath = Path.join(dirname__,'..','/public/database.db')
-const db = new Sqlite.DatabaseSync(dbPath)
+const rowNum=db.prepare(`
+  SELECT * from coordinate order by x desc limit 1
+`).all()
 
-const init = `
-  create table if not exists coordinate (
-    y integer primary key,
-    x integer not null unique 
-  )
-  
-  create table if not exists element (
-    foreign key (ind) references coordinate (x),
-    foreign key (col) references coordinate (y),
-    elem nvarchar(32) not null,
-	 name nvarchar(32) not null
-  )
-`
-
-const select = dbPointer.prepare(`
-  select ind,pad,com from tablename limit 5
+const insertCoordinate = db.prepare(`
+  INSERT INTO coordinate (x, y) values (?, ?)
 `)
 
-const insert = dbPointer.prepare(`
-  insert into tablename (ind, arr, pad, com) values (?, ?, ?, ?)
+const insertElement = db.prepare(`
+  INSERT INTO element (elem, name) values (?, ?)  
 `)
 
-function _insert(max) {
-  for (let q = 0; q < max+1; q+=1) {
-    insert.run(q, `ind_${q}_arr_${q}`, null, `comment_${q}`)
+if (rowNum.length<1) {
+  const randomArray=DataIntern.getRandomArray()
+  for (let q=0; q < randomArray.length; q+=1) {
+    insertCoordinate.run(q, 0)
+    insertElement.run(`${randomArray[q]}`, `name_${q}`)
   }
 }
+else {
+  Etc.claim(`db has ${rowNum} rows`)
+}
 
-Fs.stat(dbPath, (err,stat)=>{
-  if (err || stat.size===0) {
-    _create_table()
-  }
-  else {
-    console.dir(select.all())
-  }
-})
+const router=Express.Router()
 
 function read_from(file_path,cb) {
   fetch(file_path)

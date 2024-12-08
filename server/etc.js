@@ -1,11 +1,11 @@
-const Path = require("path")
+
 const Fs = require("fs")
 
 const keyFile = "./public/sancheck.key"
 const nikkiFile = "./public/nikki.json"
 
 function claim(about) {
-	console.log("ㅡ".repeat(5), about)
+	console.log("ㅡ".repeat(3), about)
 	return 
 }
 

@@ -1,12 +1,14 @@
-const Express=require("express")
+
 const Etc=require("../etc")
+const Express=require("express")
 
 const router=Express.Router()
 
 const session={}
 const blockWord=[
 	"php","cgi","asp","wget","chmod","remote",
-	"vscode","sftp","..","/.","env","aws"
+	"vscode","sftp","..","/.","env","aws",
+	"git","config"
 ]
 
 router.all("*",(req,res,next)=>{
