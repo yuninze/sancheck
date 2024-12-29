@@ -1,4 +1,4 @@
 node_modules/
-server/public/*
+server/public/
 server/kura/*
-__*
+*.key

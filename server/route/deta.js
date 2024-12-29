@@ -3,32 +3,6 @@ const Fs=require('fs')
 const Etc=require('../etc')
 const Express=require('express')
 const Pa=require('apache-arrow')
-const dataInit = require('./dataInit')
-
-const db=dataInit.db
-
-const rowNum=db.prepare(`
-  SELECT * from coordinate order by x desc limit 1
-`).all()
-
-const insertCoordinate = db.prepare(`
-  INSERT INTO coordinate (x, y) values (?, ?)
-`)
-
-const insertElement = db.prepare(`
-  INSERT INTO element (elem, name) values (?, ?)  
-`)
-
-if (rowNum.length<1) {
-  const randomArray=dataInit.getRandomArray()
-  for (let q=0; q < randomArray.length; q+=1) {
-    insertCoordinate.run(q, 0)
-    insertElement.run(`${randomArray[q]}`, `name_${q}`)
-  }
-}
-else {
-  Etc.claim(`db has ${rowNum} rows`)
-}
 
 const router=Express.Router()
 
