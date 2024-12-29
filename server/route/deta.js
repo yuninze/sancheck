@@ -3,9 +3,9 @@ const Fs=require('fs')
 const Etc=require('../etc')
 const Express=require('express')
 const Pa=require('apache-arrow')
-const DataIntern = require('./dataIntern')
+const dataInit = require('./dataInit')
 
-const db=DataIntern.db
+const db=dataInit.db
 
 const rowNum=db.prepare(`
   SELECT * from coordinate order by x desc limit 1
@@ -20,7 +20,7 @@ const insertElement = db.prepare(`
 `)
 
 if (rowNum.length<1) {
-  const randomArray=DataIntern.getRandomArray()
+  const randomArray=dataInit.getRandomArray()
   for (let q=0; q < randomArray.length; q+=1) {
     insertCoordinate.run(q, 0)
     insertElement.run(`${randomArray[q]}`, `name_${q}`)
