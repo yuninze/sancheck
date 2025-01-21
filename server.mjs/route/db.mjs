@@ -1,9 +1,9 @@
 import Mysql from 'mysql'
-import Fs from 'node:fs'
+import {readFile} from 'fs/promises'
 import {claim} from '../etc.mjs'
 
 const connect_to = JSON.parse(
-    Fs.readFileSync(
+    await readFile(
         '../../mysql.key',
         {encoding:'utf8'}
     )
