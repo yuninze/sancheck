@@ -2,10 +2,10 @@ import Express from 'express'
 import Path from 'node:path'
 import Fs from 'node:fs'
 import Busboy from 'busboy'
-import {naming,isNumeric,timing} from '../etc.mjs'
+import {kura_path,naming,isNumeric,timing} from '../etc.mjs'
 
 const router=Express.Router()
-const path=Path.join(__dirname,"..","kura")
+const path=kura_path
 
 router.route("/")
 	.get((req,res)=>{
@@ -81,4 +81,4 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 	})
 })
 
-module.exports=router
+export default router

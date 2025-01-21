@@ -20,6 +20,4 @@ connection.connect((err)=>{
     claim('connected.')
 })
 
-module.exports={
-    connection
-}
+export default {connection}

@@ -1,30 +1,31 @@
 import Fs from 'node:fs'
 
-const keyFile = "./public/sancheck.key"
-const nikkiFile = "./public/nikki.json"
+export const kura_path = './kura'
+const keyFile = './public/sancheck.key'
+const nikkiFile = './public/nikki.json'
 
-function claim(about) {
-  console.log("ㅡ".repeat(3), about)
+export function claim(about) {
+  console.log('ㅡ'.repeat(3), about)
   return 
 }
 
-function isNumeric(str) {
+export function isNumeric(str) {
   return !isNaN(parseFloat(str)) && isFinite(str)
 }
 
-function naming() {
+export function naming() {
   const timing = (Date.now()).toString()
   let mixing = (Math.round(Math.random() * 10 ** 8)).toString()
-  for (let l=mixing.length; l<8; l++) mixing="0"+mixing
-  return timing + "_" + mixing
+  for (let l=mixing.length; l<8; l++) mixing='0'+mixing
+  return timing + '_' + mixing
 }
 
-function parsing(url) {
+export function parsing(url) {
   return Object.fromEntries(new URLSearchParams(url))
 }
 
-function timing(itu) {
-  const key = Fs.readFileSync(keyFile, "utf8").split(",").map(q => parseInt(q))
+export function timing(itu) {
+  const key = Fs.readFileSync(keyFile, 'utf8').split(',').map(q => parseInt(q))
   const chain = {
     itu: parseInt(itu.toString().slice(0, key[1])),
     now: parseInt((Date.now() * key[0]).toString().slice(0, key[1]))
@@ -33,13 +34,14 @@ function timing(itu) {
   return chain.sa < 5000
 }
 
-function redact(string) {
+export function redact(string) {
   if (string.includes("'")) {
     const path_intern=string.slice(
-      string.indexOf("'"),string.lastIndexOf("'")+1
+      string.indexOf("'"),
+      string.lastIndexOf("'") + 1
     )
     return string.replace(
-      path_intern,".."+path_intern.slice(Math.floor(path_intern.length/2)-1)
+      path_intern,'..'+path_intern.slice(Math.floor(path_intern.length/2)-1)
     )
   }
   else {
@@ -47,30 +49,30 @@ function redact(string) {
   }
 }
 
-function nikkiNew() {
-  const naiyou={"naiyou":[]}
+export function nikkiNew() {
+  const naiyou={'naiyou':[]}
   Fs.writeFileSync(
     nikkiFile,
     JSON.stringify(naiyou),
-    {encoding:"utf8",flags:"w+"}
+    {encoding:'utf8',flags:'w+'}
   )
-  console.log("New nikkiFile been written.")
+  console.log('New nikkiFile been written.')
   return naiyou
 }
 
-function nikkiMi(string) {
+export function nikkiMi(string) {
   let nikkiContent
   try {
     nikkiContent=JSON.parse(string)
   }
   catch {
-    nikkiContent={"naiyou":[]}
+    nikkiContent={'naiyou':[]}
   }
   return nikkiContent
 }
 
-function nikkiYomi(cb) {
-  Fs.readFile(nikkiFile,"utf8",
+export function nikkiYomi(cb) {
+  Fs.readFile(nikkiFile,'utf8',
     (err,nikkiContent)=>{
       if (err) {
         cb(null,nikkiNew())
@@ -82,28 +84,29 @@ function nikkiYomi(cb) {
   )
 }
 
-function nikkiKaki(ato) {
+export function nikkiKaki(ato) {
   nikkiYomi(
     (err,naiyou)=>{
       let _naiyou
       
       if (naiyou.length>0) {
-        _naiyou={"naiyou":ato.concat(naiyou)}
+        _naiyou={'naiyou':ato.concat(naiyou)}
       }
       else {
-        _naiyou={"naiyou":ato}
+        _naiyou={'naiyou':ato}
       }
 
       Fs.writeFileSync(
         nikkiFile,
         JSON.stringify(_naiyou),
-        {encoding:"utf8",flags:"w"}
+        {encoding:'utf8',flags:'w'}
       )
     }
   )
 }
 
-module.exports={
+export default {
+    kura_path,
     claim,
     isNumeric,
     naming,

@@ -3,26 +3,26 @@ import Limit from 'express-rate-limit'
 import Http from 'node:http'
 import Https from 'node:https'
 import Path from 'node:path'
-import Fs from 'node:fs'
+import {readFileSync} from 'node:fs'
 
-import {claim} from './etc.mjs'
+import {claim,redact} from './etc.mjs'
 
 import sieve from './route/sieve.mjs'
 import dispatch from './route/dispatch.mjs'
 import kura from './route/kura.mjs'
-import deta from './route/data.mjs'
+import db from './route/db-ipc.mjs'
 
 class Cert {
     constructor() {
-        this.key=Fs.readFileSync(
+        this.key=readFileSync(
             '/etc/letsencrypt/live/sanbo.space/privkey.pem',
             'utf8'
         )
-        this.cert=Fs.readFileSync(
+        this.cert=readFileSync(
             '/etc/letsencrypt/live/sanbo.space/fullchain.pem',
             'utf8'
         )
-        this.ca=Fs.readFileSync(
+        this.ca=readFileSync(
             '/etc/letsencrypt/live/sanbo.space/fullchain.pem',
             'utf8'
         )
@@ -32,7 +32,7 @@ class Cert {
 const app=Express()
 const dog=Path.join('/public/dog.png')
 
-process.chdir(__dirname)
+process.chdir('./')
 
 app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static('./public'))
@@ -40,12 +40,12 @@ app.use(Express.json())
 app.use('*',sieve)
 app.use('/',dispatch)
 app.use('/kura',kura)
-app.use('/deta',deta)
+app.use('/db',db)
 
 app.use((err,req,res,next)=>{
 	if (err) {
 		console.log(`Was an Error (${err.message})`)
-		const errRedacted = Etc.redact(err.message)
+		const errRedacted = redact(err.message)
 		res.json({
 			'result':1,
 			'msg':errRedacted,

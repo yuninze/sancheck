@@ -1,8 +1,8 @@
-const Path=require('path')
-const Fs=require('fs')
-const Etc=require('../etc')
-const Express=require('express')
-const Pa=require('apache-arrow')
+import Express from 'express'
+import Path from 'node:path'
+import Fs from 'node:fs'
+import {kura_path} from '../etc.mjs'
+import {tableFromIPC} from 'apache-arrow'
 
 const router=Express.Router()
 
@@ -13,14 +13,14 @@ function read_from(file_path,cb) {
 }
 
 const file_name='feature.f'
-const file_path=Path.join(__dirname,'..','kura',file_name)
+const file_path=Path.join(kura_path,file_name)
 
 router.get('/',(req,res)=>{
   res.send('deta..')
 })
 
 router.get('/info',(req,res,next)=>{
-  const data=Pa.tableFromIPC(Fs.readFileSync(file_path))
+  const data=tableFromIPC(Fs.readFileSync(file_path))
   const data_shape=[data.numCols,data.numRows]
   const did_what={
     deta:{
@@ -47,4 +47,4 @@ router.post('/about/:the',(req,res,next)=>{
   )
 })
 
-module.exports=router
+export default router

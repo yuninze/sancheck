@@ -33,6 +33,6 @@ router.all('*',(req,res,next)=>{
 		if (session.result===1) return res.end()
 
 		next()
-	})
+})
 
-module.exports=router
+export default router

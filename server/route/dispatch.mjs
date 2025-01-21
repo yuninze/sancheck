@@ -1,13 +1,10 @@
 import Express from 'express'
-import Path from 'node:path'
 import {nikkiYomi} from '../etc.mjs'
 
 const router=Express.Router()
 
 router.get('/',(req,res)=>{
-	res.sendFile(
-    Path.join(__dirname,'..','index.html')
-  )
+	res.sendFile('index.html', {root: '.'})
 })
 
 router.get('/hx',(req,res)=>{
@@ -16,4 +13,4 @@ router.get('/hx',(req,res)=>{
   })
 })
 
-module.exports=router
+export default router
