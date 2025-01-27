@@ -4,7 +4,7 @@ import {claim} from '../etc.mjs'
 
 const connect_to = JSON.parse(
     await readFile(
-        '../../mysql.key',
+        './my.key',
         {encoding:'utf8'}
     )
 )

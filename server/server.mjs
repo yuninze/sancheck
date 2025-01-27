@@ -4,8 +4,12 @@ import Http from 'node:http'
 import Https from 'node:https'
 import Path from 'node:path'
 import {readFileSync} from 'node:fs'
+import {
+	claim,
+	redact
+} from './etc.mjs'
 
-import {claim,redact} from './etc.mjs'
+const __dirname=import.meta.dirname
 
 import sieve from './route/sieve.mjs'
 import dispatch from './route/dispatch.mjs'
@@ -30,9 +34,9 @@ class Cert {
 }
 
 const app=Express()
-const dog=Path.join('/public/dog.png')
+const dog=Path.join(__dirname,'/public/dog.png')
 
-process.chdir('./')
+process.chdir(__dirname)
 
 app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static('./public'))
