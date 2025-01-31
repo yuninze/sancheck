@@ -1,5 +1,5 @@
 node_modules/*
 server/public/*
 server/kura/*
-key.chain
+server/key.chain
 *.log
