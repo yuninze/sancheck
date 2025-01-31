@@ -1,8 +1,9 @@
 import Fs from 'node:fs'
+import {readFile} from 'fs/promises'
 
-export const kura_path = './kura'
-const keyFile = './public/sancheck.key'
-const nikkiFile = './public/nikki.json'
+const keyChainPath = './key.chain'
+export const keyChain = JSON.parse(await readFile(keyChainPath))
+const nikkiFile = './public/nikki.chou'
 
 export function claim(about) {
   console.log('ㅡ'.repeat(3), about)
@@ -14,7 +15,7 @@ export function isNumeric(str) {
 }
 
 export function naming() {
-  const timing = (Date.now()).toString()
+  const timing = Date.now().toString()
   let mixing = (Math.round(Math.random() * 10 ** 8)).toString()
   for (let l=mixing.length; l<8; l++) mixing='0'+mixing
   return timing + '_' + mixing
@@ -25,13 +26,12 @@ export function parsing(url) {
 }
 
 export function timing(itu) {
-  const key = Fs.readFileSync(keyFile, 'utf8').split(',').map(q => parseInt(q))
-  const chain = {
-    itu: parseInt(itu.toString().slice(0, key[1])),
-    now: parseInt((Date.now() * key[0]).toString().slice(0, key[1]))
+  const pass = Object.values(keyChain.pass).map(q => parseInt(q))
+  const passChain = {
+    itu: parseInt(itu.toString().slice(0, pass[1])),
+    now: parseInt((Date.now() * pass[0]).toString().slice(0, pass[1])),
   }
-  chain.sa = Math.abs(chain.itu - chain.now)
-  return chain.sa < 5000
+  return Math.abs(passChain.itu - passChain.now) < (Math.floor(pass[1]) * 1000 + 1000)
 }
 
 export function redact(string) {
@@ -106,13 +106,13 @@ export function nikkiKaki(ato) {
 }
 
 export default {
-    kura_path,
-    claim,
-    isNumeric,
-    naming,
-    parsing,
-    timing,
-    redact,
-    nikkiYomi,
-    nikkiKaki
+  keyChain,
+  claim,
+  isNumeric,
+  naming,
+  parsing,
+  timing,
+  redact,
+  nikkiYomi,
+  nikkiKaki
 }

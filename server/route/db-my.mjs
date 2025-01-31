@@ -1,23 +1,20 @@
 import Mysql from 'mysql'
-import {readFile} from 'fs/promises'
-import {claim} from '../etc.mjs'
+import {
+    keyChain
+} from '../etc.mjs'
 
-const connect_to = JSON.parse(
-    await readFile(
-        './my.key',
-        {encoding:'utf8'}
-    )
-)
-
-const connection = Mysql.createConnection({
-    host: 'localhost',
-    user: connect_to.user,
-    password: connect_to.password
+const pool = Mysql.createPool({
+    host: keyChain.db.hostname,
+    port: keyChain.db.port,
+    user: keyChain.db.username,
+    password: keyChain.db.password,
+    database: 'sample',
 })
 
-connection.connect((err)=>{
-    if (err) throw err
-    claim('connected.')
-})
+export function getPool(cb) {
+    pool.getConnection((err, connection)=>{
+        cb(err, connection)
+    })
+}
 
-export default {connection}
+export default {getPool}

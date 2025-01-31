@@ -5,11 +5,13 @@ import Https from 'node:https'
 import Path from 'node:path'
 import {readFileSync} from 'node:fs'
 import {
+    keyChain,
 	claim,
 	redact
 } from './etc.mjs'
 
-const __dirname=import.meta.dirname
+keyChain.path.cwd = import.meta.dirname
+process.chdir(keyChain.path.cwd)
 
 import sieve from './route/sieve.mjs'
 import dispatch from './route/dispatch.mjs'
@@ -19,24 +21,22 @@ import db from './route/db-ipc.mjs'
 class Cert {
     constructor() {
         this.key=readFileSync(
-            '/etc/letsencrypt/live/sanbo.space/privkey.pem',
+            keyChain.path.key,
             'utf8'
         )
         this.cert=readFileSync(
-            '/etc/letsencrypt/live/sanbo.space/fullchain.pem',
+            keyChain.path.cert,
             'utf8'
         )
         this.ca=readFileSync(
-            '/etc/letsencrypt/live/sanbo.space/fullchain.pem',
+            keyChain.path.ca,
             'utf8'
         )
     }
 }
 
 const app=Express()
-const dog=Path.join(__dirname,'/public/dog.png')
-
-process.chdir(__dirname)
+const dog=Path.join(keyChain.path.cwd, './public/dog.png')
 
 app.use(Limit({windowMs:1000*10,max:5}))
 app.use(Express.static('./public'))

@@ -3,14 +3,13 @@ import Path from 'node:path'
 import Fs from 'node:fs'
 import Busboy from 'busboy'
 import {
-	kura_path,
 	naming,
 	isNumeric,
 	timing
 } from '../etc.mjs'
 
 const router=Express.Router()
-const path=kura_path
+const path='./kura'
 
 router.route("/")
 	.get((req,res)=>{
