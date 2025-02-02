@@ -10,11 +10,11 @@ from time import sleep
 
 from requests_toolbelt import MultipartEncoder
 
-ornament=" ❤️ " * 1
+ornament="❤️" * 1
 fileSizeLimit=1024 ** 3 * 6
 chunkSize=1024 ** 3 * 1
 
-dst="https://sanbo.space/kura"
+dst="http://sanbo.space/kura"
 cert="./yuninze/res/sodok.crt"
 
 def hello(
@@ -96,8 +96,8 @@ def hello(
         ))
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
 
-if sys.argv[1]:
+if len(sys.argv)>1:
     externPath=sys.argv[1]
     hello(dst,cert,externPath)
 else:
-    print(ornament,"A Switch Hasn't Been Provided.")
+    print(ornament,"A Switch Hasn't Provided.")
