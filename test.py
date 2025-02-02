@@ -96,7 +96,7 @@ def hello(
         ))
     return [_post(dst,list(extern.keys())[0]) for q in range(repeat)]
 
-if sys.argv[1]:
+if len(sys.argv)>1:
     externPath=sys.argv[1]
     hello(dst,cert,externPath)
 else:

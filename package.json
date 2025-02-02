@@ -7,11 +7,11 @@
     "express-rate-limit": "^5.5.1"
   },
   "name": "sancheck",
-  "version": "2401",
+  "version": "2025",
   "description": "sancheck",
-  "main": "./server/server.js",
+  "main": "./server/server.mjs",
   "scripts": {
-    "start": "node --experimental-sqlite /server/server.js",
+    "start": "node ./server/server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

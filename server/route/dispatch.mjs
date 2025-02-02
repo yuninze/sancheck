@@ -1,46 +1,30 @@
 import Express from 'express'
-import {claim,nikkiYomi,nikkiKaki} from '../etc.mjs'
-import {sew} from '../element/dispatch.mjs'
+import {nikkiYomi,contentJson} from '../etc.mjs'
+import Project from './project.mjs'
 
 const router=Express.Router()
-const session={}
-const blockWord=[
-    'php','cgi','asp','wget','chmod','remote',
-    'vscode','sftp','..','/.','env','aws','git','config'
-]
 
-router.all('*',(req,res,next)=>{
-    const ip=req.socket.remoteAddress
-    
-    session.datetime=new Date().toISOString()
-    session.ip=ip.slice(ip.indexOf(':',2)+1)
-    session.ua=req.get('User-Agent')
-    session.method=req.method
-    session.url=req.originalUrl
-    session.result=0
-    
-    if (blockWord.some(word=>
-        (session.url.toLowerCase()).includes(word)
-    )) {session.result=1}
-    
-    if (!session.url.endsWith('.ico')) {
-        claim(session)
-        nikkiKaki([session])
-    }
-    
-    if (session.result===1) return res.end()
-    
-    next()
+router.get('/article',(req,res)=>{
+  res.send(Project.template(
+    'Article',
+    Project.article(contentJson.article)
+  ))
+})
+
+router.get('/testbed',(req,res)=>{
+  nikkiYomi((err,data)=>{
+    res.send(Project.template(
+      'Testbed',
+      Project.log(Object.groupBy(data,({ip})=>(ip)))
+    ))
+  })
 })
 
 router.get('/',(req,res)=>{
-    res.sendFile('index.html', {root: '.'})
-})
-
-router.get('/hx',(req,res)=>{
-    nikkiYomi((err,data)=>{
-        res.json(data)
-    })
+	res.send(Project.template(
+    'About',
+    Project.article(contentJson.firstpage)
+  ))
 })
 
 export default router
