@@ -3,17 +3,19 @@ import Path from 'node:path'
 import Fs from 'node:fs'
 import Busboy from 'busboy'
 import {
+	claim,
 	naming,
 	isNumeric,
 	timing
 } from '../etc.mjs'
+import Project from './project.mjs'
 
 const router=Express.Router()
 const path='./kura'
 
 router.route("/")
 	.get((req,res)=>{
-		res.send("kura")
+		res.send(Project.template('Kura','Working on it'))
 	})
 
 	.post((req,res)=>{
@@ -54,6 +56,9 @@ router.get("/stat",(req,res,next)=>{
 
 router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 	const url={...req.params}
+	const filename=Path.join(path,url.mono)
+
+	claim(`req.filename: ${filename}`)
 
 	let err=new Error()
 	err.spec={
@@ -66,23 +71,16 @@ router.get("/mono/:mono/itu/:itu",(req,res,next)=>{
 	
 	if (err.spec.private) {
 		if (Object.values(err.spec).some((v)=>v)) {
-			err.message=Object.keys(err.spec).filter(
-				(spec)=>{if (err.spec[spec]) return true}).join(", ")
+			err.message=Object.keys(err.spec).filter((spec)=>
+				{if (err.spec[spec]) return true}).join(", ")
 			next(err)
 		}
 	}
-
-	const fileToUpload=Path.join(path,url.mono)
-
-	Fs.access(fileToUpload,(err)=>{
-		if (!err) {
-			console.log(`The filename in the request was: ${fileToUpload}`)
-			return res.download(fileToUpload)
-		}
-		else {
-			next(err)
-		}
-	})
+	else {
+		Fs.access(filename,(err)=>{
+			if (!err) {res.download(filename)}
+		})
+	}
 })
 
 export default router

@@ -1,12 +1,14 @@
+import Path from 'node:path'
 import Fs from 'node:fs'
 import {readFile} from 'fs/promises'
 
-const keyChainPath = './key.chain'
+export const basePath=import.meta.dirname
+const keyChainPath=Path.join(basePath,'./key.chain')
 export const keyChain = JSON.parse(await readFile(keyChainPath))
-const nikkiFile = './public/nikki.chou'
+const nikkiFile=Path.join(basePath,'./public/nikki.chou')
 
-export function claim(about) {
-  console.log('ㅡ'.repeat(3), about)
+export function claim(...about) {
+  console.log('ㅡ'.repeat(1), ...about)
   return 
 }
 
@@ -105,14 +107,20 @@ export function nikkiKaki(ato) {
   )
 }
 
+export const contentJson=JSON.parse(
+  await readFile(Path.join(basePath,'./content.json'))
+)
+
 export default {
-  keyChain,
-  claim,
-  isNumeric,
-  naming,
-  parsing,
-  timing,
-  redact,
-  nikkiYomi,
-  nikkiKaki
+    basePath,
+    keyChain,
+    claim,
+    isNumeric,
+    naming,
+    parsing,
+    timing,
+    redact,
+    nikkiYomi,
+    nikkiKaki,
+    contentJson
 }
