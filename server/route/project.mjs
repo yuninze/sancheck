@@ -16,7 +16,7 @@ export function template(title,content) {
 export function article(objList) {
     return objList.map(item=>`
         <div class="content article">
-            <h2>${item.subtitle} <sub>${item.date ? item.date : ''}</sub></h2>
+            <h2>${item.subtitle ?? 'Untitled'} <sub>${item.date ?? ''}</sub></h2>
             <p>${item.content}</p>
         </div>
     `).join('')
