@@ -16,7 +16,7 @@ export function template(title,content) {
 export function article(objList) {
     return objList.map(item=>`
         <div class="content article">
-            <h2>${item.subtitle ?? 'Untitled'} <sub>${item.date ?? ''}</sub></h2>
+            <h2>${item.title ?? 'Untitled'} <sub>${item.subtitle ?? ''}</sub></h2>
             <p>${item.content}</p>
         </div>
     `).join('')
@@ -28,7 +28,7 @@ export function log(objList) {
     ).join('')
     return Object.keys(objList).map(obj=>`
         <div class="content-log">
-            <h3>${obj}</h3>
+            <h2>${obj}</h2>
             <ol>${it(obj)}</ol>
         </div>
     `).join('')
@@ -64,7 +64,7 @@ const style=()=>`
         }
         * {
             color: #000000;
-            font-family: "PretendardWeb", Pretendard, Serif;
+            font-family: Pretendard, PretendardWeb, Serif;
             font-weight: 500;
         }
         h1,h2,h3,h4,h5 {
@@ -97,12 +97,17 @@ const style=()=>`
             text-decoration: underline;
         }
         .article sub {
-            font-size: 1rem;
-            margin: 0rem 0.5rem 0rem;
+            font-size: 0.8rem;
+            margin: 0rem 0.2rem 0rem;
         }
         .article p {
-            font-size: 1.2rem;
-            margin: 1rem 2rem 2rem;
+            font-size: 1rem;
+            margin: 1rem 2rem 1rem;
+        }
+        .article li {
+            font-size: 1rem;
+            margin: 0rem 1.7rem 0rem;
+            list-style-type: square;
         }
         .foot {
             color: #cccccc;

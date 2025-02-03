@@ -79,10 +79,12 @@ try {
     port=ports[0]
 }
 catch (err) {
-    claim(`HTTP Fallback: ${err.message}`)
+    claim(`Fallback to HTTP: ${err.message}`)
     server=Http.createServer(app)
     port=ports[1]
 }
 finally {
-    server.listen(port,addr,()=>{})
+    server.listen(port,addr,()=>{
+        claim('Port:', port)
+    })
 }

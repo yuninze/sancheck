@@ -8,7 +8,7 @@ export const keyChain = JSON.parse(await readFile(keyChainPath))
 const nikkiFile=Path.join(basePath,'./public/nikki.chou')
 
 export function claim(...about) {
-  console.log('ㅡ'.repeat(1), ...about)
+  console.log(' '.repeat(2), ...about)
   return 
 }
 
