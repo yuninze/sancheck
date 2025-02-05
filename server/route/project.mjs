@@ -15,10 +15,10 @@ export function template(title,content) {
 
 export function article(objList) {
     return objList.map(item=>`
-        <div class="content article">
+        <article class="article">
             <h2>${item.title ?? 'Untitled'} <sub>${item.subtitle ?? ''}</sub></h2>
-            <p>${item.content}</p>
-        </div>
+            ${item.content}
+        </article>
     `).join('')
 }
 
@@ -27,10 +27,10 @@ export function log(objList) {
         li(JSON.stringify(item))
     ).join('')
     return Object.keys(objList).map(obj=>`
-        <div class="content-log">
+        <article>
             <h2>${obj}</h2>
             <ol>${it(obj)}</ol>
-        </div>
+        </article>
     `).join('')
 }
 
@@ -63,6 +63,7 @@ const style=()=>`
             src: url("https://github.com/orioncactus/pretendard/raw/refs/heads/main/packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format('woff2-variations');
         }
         * {
+            position: relative;
             color: #000000;
             font-family: Pretendard, PretendardWeb, Serif;
             font-weight: 500;
@@ -74,17 +75,17 @@ const style=()=>`
             text-decoration: none;
         }
         a:hover {
-            color: #cccccc;
+            color: #bbbbbb;
         }
         .bar {
             width: 100%;
             overflow: auto;
+            font-size: 1.2rem;
         }
         .bar a {
-            font-size: 1.2rem;
             margin: 1rem 1rem 1rem;
         }
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 500px) {
             .bar a {
                 float: none;
                 display: block;
@@ -93,25 +94,42 @@ const style=()=>`
         .content {
             margin: 1.7rem 1rem 0rem;
         }
-        .article a {
-            text-decoration: underline;
+        .content a {
+            text-decoration: none;
         }
-        .article sub {
-            font-size: 0.8rem;
-            margin: 0rem 0.2rem 0rem;
+        .article {
+            width: 100%;
         }
         .article p {
-            font-size: 1rem;
-            margin: 1rem 2rem 1rem;
+            margin: 0rem 1.7rem 0rem;
+        }
+        .article a {
+            text-decoration: underline;
+            text-decoration-thickness: 0.1rem;
+        }
+        .article sub {
+            margin: 0rem 0.5rem 0rem;
+            font-size: 0.8rem;
         }
         .article li {
+            margin: 0.2rem 1.7rem 0rem;
             font-size: 1rem;
-            margin: 0rem 1.7rem 0rem;
             list-style-type: square;
+            display: inline-block;
+        }
+        .article img {
+            width: 20%;
+            min-width: 300px;
+            margin: 0.5rem 1rem 0.5rem;
+            float: left;
+            position: relative;
+        }
+        .log {
+            font-size: 0.8rem
         }
         .foot {
-            color: #cccccc;
             margin: 1.7rem 1rem 0rem;
+            color: #bbbbbb;
             text-align: right;
         }
     `
@@ -127,9 +145,13 @@ const bar=()=>`
 const body=(title,content)=>{
     return `
         <div>
-            <h1>${title}</h1>
+            <h1>
+                ${title}
+            </h1>
             <hr/>
-            <p class="content">${content}</p>
+            <div class="content">
+                ${content}
+            </div>
         </div>
     `
 }
@@ -137,7 +159,7 @@ const body=(title,content)=>{
 const foot=()=>{
     return `
         <div class="foot">
-            250131
+            25-01-31
         </div>
     `
 }
