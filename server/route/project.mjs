@@ -17,7 +17,7 @@ export function article(objList) {
     return objList.map(item=>`
         <div class="content article">
             <h2>${item.title ?? 'Untitled'} <sub>${item.subtitle ?? ''}</sub></h2>
-            <p>${item.content}</p>
+            <p>${item.content ?? 'No Content'}</p>
         </div>
     `).join('')
 }

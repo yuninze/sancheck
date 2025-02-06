@@ -50,8 +50,8 @@ app.use('/kura',kura)
 
 app.use((err,req,res,next)=>{
     if (err) {
-        claim('Was an Error', err.message)
         const errRedacted = redact(err.message)
+        claim('Was an Error', err.message)
         res.json({error:{
             result:1,
             msg:errRedacted,

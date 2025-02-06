@@ -87,24 +87,22 @@ export function nikkiYomi(cb) {
 }
 
 export function nikkiKaki(ato) {
-  nikkiYomi(
-    (err,naiyou)=>{
-      let _naiyou
-      
-      if (naiyou.length>0) {
-        _naiyou={'naiyou':ato.concat(naiyou)}
-      }
-      else {
-        _naiyou={'naiyou':ato}
-      }
-
-      Fs.writeFileSync(
-        nikkiFile,
-        JSON.stringify(_naiyou),
-        {encoding:'utf8',flags:'w'}
-      )
+  nikkiYomi((err,naiyou)=>{
+    let _naiyou
+    
+    if (naiyou.length>0) {
+      _naiyou={'naiyou':ato.concat(naiyou)}
     }
-  )
+    else {
+      _naiyou={'naiyou':ato}
+    }
+    
+    Fs.writeFileSync(
+      nikkiFile,
+      JSON.stringify(_naiyou),
+      {encoding:'utf8',flags:'w'}
+    )
+  })
 }
 
 export const contentJson=JSON.parse(

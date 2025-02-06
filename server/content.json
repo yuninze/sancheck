@@ -30,6 +30,11 @@
     "content":"3rd Placeholder"
     },
     {
+    "title":"Placeholder",
+    "subtitle":"2000-01-30",
+    "content":"3rd Placeholder"
+    },
+    {
     "title":"bicpy",
     "subtitle":"Dask, Zarr, Cupy, Cuml",
     "content":"<li>Thanks to task-based lazy evaluation and array chunking, the wrappers in this repository are helpful to cope with computing large arrays (embedding-like, >35_000_000 in the example) and saving intermediate results on restricted environments.</li><li>Any observations or features without given groundtruth can be compressed, grouped or clustered without GPU.</li>"
