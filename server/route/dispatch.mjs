@@ -14,14 +14,16 @@ router.get('/article',(req,res)=>{
 router.get('/testbed',(req,res)=>{
   nikkiYomi((err,data)=>{
     res.send(Project.template(
-      'Testbed',
-      Project.log(Object.groupBy(data,({ip})=>(ip)))
+        'Testbed',
+        Project.log(
+            Object.groupBy(data,({ip})=>(ip))
+        )
     ))
   })
 })
 
 router.get('/',(req,res)=>{
-	res.send(Project.template(
+    res.send(Project.template(
     'About',
     Project.article(contentJson.firstpage)
   ))

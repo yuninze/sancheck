@@ -4,7 +4,7 @@ import {readFile} from 'fs/promises'
 
 export const basePath=import.meta.dirname
 const keyChainPath=Path.join(basePath,'./key.chain')
-export const keyChain = JSON.parse(await readFile(keyChainPath))
+export const keyChain=JSON.parse(await readFile(keyChainPath))
 const nikkiFile=Path.join(basePath,'./public/nikki.chou')
 
 export function claim(...about) {
@@ -106,7 +106,7 @@ export function nikkiKaki(ato) {
 }
 
 export const contentJson=JSON.parse(
-  await readFile(Path.join(basePath,'./content.json'))
+    await readFile(Path.join(basePath, './public/content.json'))
 )
 
 export default {
