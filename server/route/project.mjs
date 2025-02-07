@@ -18,7 +18,7 @@ export function article(objList) {
         return `
             <article class="article">
                 <h2>${item.title ?? 'Untitled'}<sub>${item.subtitle ?? ''}</sub></h2>
-                ${item.content}
+                ${item.content ?? 'Null Content'}
             </article>
         `
     }).join('')
