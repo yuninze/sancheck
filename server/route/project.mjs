@@ -5,21 +5,23 @@ export function template(title,content) {
         <html lang="en">
             ${head(title)}
             <body>
-            ${bar()}
+            <div class="bar">${bar()}</div>
             ${body(title,content)}
-            ${foot()}
+            <div class="foot">${foot()}</div>
             </body>
         </html>
     `
 }
 
 export function article(objList) {
-    return objList.map(item=>`
-        <article class="article">
-            <h2>${item.title ?? 'Untitled'} <sub>${item.subtitle ?? ''}</sub></h2>
-            ${item.content}
-        </article>
-    `).join('')
+    return objList.map(item=>{
+        return `
+            <article class="article">
+                <h2>${item.title ?? 'Untitled'}<sub>${item.subtitle ?? ''}</sub></h2>
+                ${item.content}
+            </article>
+        `
+    }).join('')
 }
 
 export function log(objList) {
@@ -27,7 +29,7 @@ export function log(objList) {
         li(JSON.stringify(item))
     ).join('')
     return Object.keys(objList).map(obj=>`
-        <article>
+        <article class="log">
             <h2>${obj}</h2>
             <ol>${it(obj)}</ol>
         </article>
@@ -38,8 +40,30 @@ const li=(item)=>{
     return `<li>${item}</li>`
 }
 
+const body=(title,content)=>{
+    return `
+        <div>
+            <h1>${title}</h1>
+            <hr/>
+            <div class="content">${content}</div>
+        </div>
+    `
+}
+
 const img=(src,alt)=>{
     return `<img src=${src} alt=${alt}>`
+}
+
+const bar=()=>`
+    <a href="/">Yun Inze's Page</a>
+    <a href="/article">Article</a>
+    <a href="/testbed">Testbed</a>
+`
+
+const foot=()=>{
+    return `
+        25-01-31
+    `
 }
 
 const head=(title)=>{
@@ -54,6 +78,7 @@ const head=(title)=>{
     `
 }
 
+const styleWidthCommon='90%'
 const style=()=>`
         @font-face {
             font-family: "PretendardWeb";
@@ -63,10 +88,12 @@ const style=()=>`
             src: url("https://github.com/orioncactus/pretendard/raw/refs/heads/main/packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format('woff2-variations');
         }
         * {
-            position: relative;
             color: #000000;
             font-family: Pretendard, PretendardWeb, Serif;
             font-weight: 500;
+        }
+        body {
+            width: 100%;
         }
         h1,h2,h3,h4,h5 {
             margin: 1.7rem 1rem 0rem;
@@ -77,31 +104,35 @@ const style=()=>`
         a:hover {
             color: #bbbbbb;
         }
-        .bar {
+        hr {
             width: 100%;
+        }
+        .bar {
+            width: ${styleWidthCommon};
             overflow: auto;
             font-size: 1.2rem;
         }
         .bar a {
             margin: 1rem 1rem 1rem;
         }
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 400px) {
             .bar a {
                 float: none;
                 display: block;
             }
         }
         .content {
-            margin: 1.7rem 1rem 0rem;
+            margin: 0rem 1rem 1rem;
         }
         .content a {
             text-decoration: none;
         }
         .article {
-            width: 100%;
+            width: ${styleWidthCommon};
+            display: inline-block;
         }
         .article p {
-            margin: 0rem 1.7rem 0rem;
+            margin: 0.5rem 0.8rem 1rem 1.7rem;
         }
         .article a {
             text-decoration: underline;
@@ -112,57 +143,27 @@ const style=()=>`
             font-size: 0.8rem;
         }
         .article li {
-            margin: 0.2rem 1.7rem 0rem;
+            margin: 0.5rem 1.7rem 0rem;
             font-size: 1rem;
             list-style-type: square;
-            display: inline-block;
         }
         .article img {
             width: 20%;
             min-width: 300px;
+            max-width: 400px;
             margin: 0.5rem 1rem 0.5rem;
             float: left;
-            position: relative;
         }
         .log {
-            font-size: 0.8rem
+            width: ${styleWidthCommon};
+            font-size: 0.8rem;
         }
         .foot {
-            margin: 1.7rem 1rem 0rem;
+            width: ${styleWidthCommon};
             color: #bbbbbb;
             text-align: right;
         }
     `
-
-const bar=()=>`
-    <div class="bar">
-        <a href="/">Yun Inze's Page</a>
-        <a href="/article">Article</a>
-        <a href="/testbed">Testbed</a>
-    </div>
-`
-
-const body=(title,content)=>{
-    return `
-        <div>
-            <h1>
-                ${title}
-            </h1>
-            <hr/>
-            <div class="content">
-                ${content}
-            </div>
-        </div>
-    `
-}
-
-const foot=()=>{
-    return `
-        <div class="foot">
-            25-01-31
-        </div>
-    `
-}
 
 export default {
     template,
