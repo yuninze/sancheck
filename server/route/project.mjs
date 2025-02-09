@@ -148,18 +148,14 @@ const style=()=>`
     text-decoration-thickness: 0.01rem;
   }
   .article li {
-    margin: 0.5rem 0.2rem 0rem 4rem;
+    margin: 0.5rem 0.5rem 0rem 1.4rem;
     font-size: 1rem;
-    list-style-type: square;
-    list-style-position: inside;
-    text-indent: -1.4rem;
-    padding-left: 2rem;
   }
   .article img {
     width: 20%;
-    min-width: 340px;
+    min-width: 300px;
     max-width: 400px;
-    margin: 0.5rem 2.2rem 0.5rem 1rem;
+    margin: 0.5rem 1.5rem 0.5rem 1rem;
     float: left;
   }
   .log {
