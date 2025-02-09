@@ -5,10 +5,10 @@ import Https from 'node:https'
 import Path from 'node:path'
 import {readFileSync} from 'node:fs'
 import {
-    basePath,
-    keyChain,
-    claim,
-    redact
+  basePath,
+  keyChain,
+  claim,
+  redact
 } from './etc.mjs'
 
 import sieve from './route/sieve.mjs'
@@ -16,20 +16,20 @@ import dispatch from './route/dispatch.mjs'
 import kura from './route/kura.mjs'
 
 class Cert {
-    constructor() {
-        this.key=readFileSync(
-            keyChain.path.key,
-            'utf8'
-        )
-        this.cert=readFileSync(
-            keyChain.path.cert,
-            'utf8'
-        )
-        this.ca=readFileSync(
-            keyChain.path.ca,
-            'utf8'
-        )
-    }
+  constructor() {
+    this.key=readFileSync(
+      keyChain.path.key,
+      'utf8'
+    )
+    this.cert=readFileSync(
+      keyChain.path.cert,
+      'utf8'
+    )
+    this.ca=readFileSync(
+      keyChain.path.ca,
+      'utf8'
+    )
+  }
 }
 
 const app=Express()
@@ -44,27 +44,25 @@ app.use(Express.json())
 
 app.use('*',sieve)
 app.use('/',dispatch)
-app.use('/article',dispatch)
-app.use('/about',dispatch)
 app.use('/kura',kura)
 
 app.use((err,req,res,next)=>{
-    if (err) {
-        const errRedacted = redact(err.message)
-        claim('Was an Error', err.message)
-        res.json({error:{
-            result:1,
-            msg:errRedacted,
-        }})
-    }
-    else {
-        next()
-    }
+  if (err) {
+    const errRedacted = redact(err.message)
+    claim('Was an Error', err.message)
+    res.json({error:{
+      result:1,
+      msg:errRedacted,
+    }})
+  }
+  else {
+    next()
+  }
 })
 
 app.use((req,res)=>{
-    claim('The request been reached.','(dog)')
-    res.sendFile(dog)
+  claim(req.originalUrl, 'has been exhausted.')
+  res.sendFile(dog)
 })
 
 const ports=[4430,8023]
@@ -74,17 +72,17 @@ let server
 let port
 
 try {
-    const httpsCert=new Cert()
-    server=Https.createServer(httpsCert,app)
-    port=ports[0]
+  const httpsCert=new Cert()
+  server=Https.createServer(httpsCert,app)
+  port=ports[0]
 }
 catch (err) {
-    claim(`Fallback to HTTP: ${err.message}`)
-    server=Http.createServer(app)
-    port=ports[1]
+  claim(`HTTP Fallback: ${err.message}`)
+  server=Http.createServer(app)
+  port=ports[1]
 }
 finally {
-    server.listen(port,addr,()=>{
-        claim('Port:', port)
-    })
+  server.listen(port,addr,()=>{
+    claim('Port:', port)
+  })
 }

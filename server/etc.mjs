@@ -68,7 +68,7 @@ export function nikkiMi(string) {
     nikkiContent=JSON.parse(string)
   }
   catch {
-    nikkiContent={'naiyou':[]}
+    nikkiContent={naiyou: []}
   }
   return nikkiContent
 }
